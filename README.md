@@ -1,5 +1,5 @@
 # 📝 You Do
-A simple To Do App to manage and organize your daily tasks
+A simple To-Do app to help you manage and organize your daily tasks.
 
 ## Tech Stack
 - Front-end: Blazor 
