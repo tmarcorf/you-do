@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +18,7 @@ namespace YouDo.Infraestructure.IoC
         {
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), 
-                builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
+                options => options.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
             );
 
             services.AddIdentity<User, IdentityRole>()
