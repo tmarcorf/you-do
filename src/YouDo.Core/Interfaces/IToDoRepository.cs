@@ -15,9 +15,9 @@ namespace YouDo.Core.Interfaces
 
         Task<ToDo> GetByIdAsync(Guid id);
 
-        Task<ToDo> CreateAsync(Guid id);
+        Task<ToDo> CreateAsync(ToDo toDo);
 
-        Task<ToDo> UpdateAsync(Guid id);
+        Task<ToDo> UpdateAsync(ToDo toDo);
 
         Task<bool> DeleteAsync(Guid id);
     }
