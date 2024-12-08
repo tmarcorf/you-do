@@ -13,9 +13,9 @@ namespace YouDo.Core.Entities
 
         public string Details { get; set; }
 
-        public DateTime CreatedAt { get; set; } 
+        public DateTime CreatedAt { get; private set; } 
 
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; private set; }
 
         public bool Completed { get; set; }
 
@@ -25,6 +25,7 @@ namespace YouDo.Core.Entities
 
             Id = id;
             Title = title;
+            CreatedAt = DateTime.Now;
         }
 
         public void Update(Guid id, string title)
@@ -33,6 +34,7 @@ namespace YouDo.Core.Entities
 
             Id = id;
             Title = title;
+            UpdatedAt = DateTime.Now;
         }
 
         private void ValidateDomain(Guid id, string title)
