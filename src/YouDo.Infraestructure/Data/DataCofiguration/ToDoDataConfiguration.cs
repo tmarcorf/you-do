@@ -13,7 +13,7 @@ namespace YouDo.Infraestructure.Data.DataCofiguration
             builder.Property(x => x.Title).HasColumnName("TITLE").HasMaxLength(100).IsRequired();
             builder.Property(x => x.Details).HasColumnName("DETAILS").HasMaxLength(500);
             builder.Property(x => x.Completed).HasColumnName("COMPLETED").HasDefaultValue(false);
-            builder.Property(x => x.UserId).HasColumnName("USERID").HasMaxLength(40);
+            builder.Property(x => x.UserId).HasColumnName("USERID").HasMaxLength(40).IsRequired();
         }
     }
 }
