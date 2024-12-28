@@ -37,6 +37,7 @@ namespace YouDo.Application.Services
 
         public async Task CreateAsync(ToDoDTO toDoDto)
         {
+            toDoDto.Id = Guid.NewGuid();
             toDoDto.CreatedAt = DateTime.Now;
             var toDoEntity = toDoDto.ToEntity();
 
