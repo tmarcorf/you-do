@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using YouDo.Application.Interfaces;
+using YouDo.Application.Services;
 using YouDo.Core.Account;
 using YouDo.Core.Interfaces;
 using YouDo.Infraestructure.Data.Context;
@@ -16,8 +18,10 @@ namespace YouDo.Infraestructure.IoC
             this IServiceCollection services,
             IConfiguration configuration)
         {
+            var connectionString = Environment.GetEnvironmentVariable(configuration["DefaultConnection"]);
+
             services.AddDbContext<ApplicationDbContext>(
-                options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), 
+                options => options.UseNpgsql(connectionString, 
                 options => options.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
             );
 
@@ -25,11 +29,10 @@ namespace YouDo.Infraestructure.IoC
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.ConfigureApplicationCookie(
-                options => options.AccessDeniedPath = "/Account/Login");
-
             services.AddScoped<IToDoRepository, ToDoRepository>();
+
             services.AddScoped<IAuthenticateService, AuthenticateService>();
+            services.AddScoped<IToDoService, ToDoService>();
 
             return services;
         }

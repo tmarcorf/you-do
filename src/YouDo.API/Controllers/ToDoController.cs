@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using YouDo.Application.DTOs;
 using YouDo.Application.Interfaces;
 
@@ -39,13 +37,15 @@ namespace YouDo.API.Controllers
             return Ok(toDos);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<ToDoDTO>>> GetById(string id)
+        [HttpGet("specific/{id}")]
+        public async Task<ActionResult<ToDoDTO>> GetById(string id)
         {
             Guid idGuid;
             if (!Guid.TryParse(id, out idGuid)) return NotFound("ToDo not found");
 
             var toDo = await _service.GetByIdAsync(idGuid);
+
+            if (toDo == null) return NotFound("ToDo not found");
 
             return Ok(toDo);
         }

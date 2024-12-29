@@ -1,4 +1,6 @@
 
+using YouDo.Infraestructure.IoC;
+
 namespace YouDo.API
 {
     public class Program
@@ -6,13 +8,12 @@ namespace YouDo.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var services = builder.Services;
 
-            // Add services to the container.
-
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            services.AddInfrastructure(builder.Configuration);
+            services.AddControllers();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
 
             var app = builder.Build();
 

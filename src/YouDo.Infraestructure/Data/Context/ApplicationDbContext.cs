@@ -7,9 +7,10 @@ namespace YouDo.Infraestructure.Data.Context
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
             : base(options)
-        { }
+        {
+        }
 
         public DbSet<ToDo> ToDos { get; set; }
 

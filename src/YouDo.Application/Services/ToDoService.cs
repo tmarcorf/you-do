@@ -38,7 +38,9 @@ namespace YouDo.Application.Services
         public async Task CreateAsync(ToDoDTO toDoDto)
         {
             toDoDto.Id = Guid.NewGuid();
-            toDoDto.CreatedAt = DateTime.Now;
+            toDoDto.CreatedAt = DateTime.UtcNow;
+            toDoDto.Completed = false;
+
             var toDoEntity = toDoDto.ToEntity();
 
             await _repository.CreateAsync(toDoEntity);
@@ -46,7 +48,7 @@ namespace YouDo.Application.Services
 
         public async Task UpdateAsync(ToDoDTO toDoDto)
         {
-            toDoDto.UpdatedAt = DateTime.Now;
+            toDoDto.UpdatedAt = DateTime.UtcNow;
             var toDoEntity = toDoDto.ToEntity();
 
             await _repository.UpdateAsync(toDoEntity);
