@@ -29,6 +29,15 @@ namespace YouDo.Infraestructure.IoC
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequiredLength = 8;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
+            });
+
             services.AddScoped<IToDoRepository, ToDoRepository>();
 
             services.AddScoped<IAuthenticateService, AuthenticateService>();
