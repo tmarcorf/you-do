@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using YouDo.API.Extensions;
+using YouDo.API.Models.ToDo;
 using YouDo.Application.DTOs;
 using YouDo.Application.Interfaces;
 
@@ -6,6 +10,7 @@ namespace YouDo.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ToDoController : ControllerBase
     {
         private readonly IToDoService _service;
@@ -51,23 +56,23 @@ namespace YouDo.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create([FromBody] ToDoDTO toDoDto)
+        public async Task<ActionResult> Create([FromBody] CreateToDoModel createToDoModel)
         {
-            if (toDoDto == null) return BadRequest("Invalid data");
+            if (createToDoModel == null) return BadRequest("Invalid data");
 
-            await _service.CreateAsync(toDoDto);
+            await _service.CreateAsync(createToDoModel.ToDto());
 
-            return Created();
+            return new CreatedResult();
         }
 
         [HttpPut]
-        public async Task<ActionResult> Update([FromBody] ToDoDTO toDoDto)
+        public async Task<ActionResult> Update([FromBody] UpdateToDoModel updateTodoModel)
         {
-            if (toDoDto == null) return BadRequest("Invalid data");
+            if (updateTodoModel == null) return BadRequest("Invalid data");
 
-            await _service.UpdateAsync(toDoDto);
+            await _service.UpdateAsync(updateTodoModel.ToDto());
 
-            return Ok(toDoDto);
+            return Ok(updateTodoModel);
         }
 
         [HttpDelete("{id}")]

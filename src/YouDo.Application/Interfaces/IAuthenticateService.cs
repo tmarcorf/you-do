@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using YouDo.Application.DTOs;
 using YouDo.Core.Entities;
 
-namespace YouDo.Core.Account
+namespace YouDo.Application.Interfaces
 {
     public interface IAuthenticateService
     {
-        Task<bool> Authenticate(string email, string password);
+        Task<UserTokenDTO> Authenticate(string email, string password);
 
         Task<IdentityResult> RegisterUser(User user, string password);
 

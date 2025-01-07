@@ -11,6 +11,9 @@ namespace YouDo.API
             var services = builder.Services;
 
             services.AddInfrastructure(builder.Configuration);
+            services.AddInfrastructureJWT(builder.Configuration);
+            services.AddInfrastructureSwagger();
+
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();

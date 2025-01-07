@@ -1,6 +1,6 @@
 ﻿using YouDo.Core.Enums;
 
-namespace YouDo.API.Models
+namespace YouDo.API.Models.Authenticate
 {
     public class CreateUserModel
     {

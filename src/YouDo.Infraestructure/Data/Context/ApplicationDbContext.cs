@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using YouDo.Core.Entities;
-using YouDo.Infraestructure.Data.Identity;
 
 namespace YouDo.Infraestructure.Data.Context
 {

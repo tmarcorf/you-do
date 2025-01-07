@@ -1,4 +1,4 @@
-﻿using YouDo.API.Models;
+﻿using YouDo.API.Models.Authenticate;
 using YouDo.Core.Entities;
 
 namespace YouDo.API.Extensions
