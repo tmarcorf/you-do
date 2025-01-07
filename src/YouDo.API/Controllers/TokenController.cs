@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using YouDo.API.Extensions;
 using YouDo.API.Models;
 using YouDo.Core.Account;
 
@@ -23,14 +24,9 @@ namespace YouDo.API.Controllers
         {
             if (createUserModel == null) return BadRequest("Invalid data");
 
-            var successfullyCreated = await _authenticateService.RegisterUser(createUserModel.Email, createUserModel.Password);
+            var createResult = await _authenticateService.RegisterUser(createUserModel.ToEntity(), createUserModel.Password);
 
-            if (!successfullyCreated)
-            {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt");
-
-                return BadRequest(ModelState);
-            }
+            if (!createResult.Succeeded) return BadRequest(createResult);
 
             return Ok($"User {createUserModel.Email} was successfully created");
         }

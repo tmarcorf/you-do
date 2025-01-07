@@ -1,14 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YouDo.Core.Entities;
 using YouDo.Core.Interfaces;
 using YouDo.Infraestructure.Data.Context;
-using YouDo.Infraestructure.Data.Identity;
 
 namespace YouDo.Infraestructure.Data.Repositories
 {

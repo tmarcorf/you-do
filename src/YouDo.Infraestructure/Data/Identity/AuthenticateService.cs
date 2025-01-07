@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using YouDo.Core.Account;
+using YouDo.Core.Entities;
 
 namespace YouDo.Infraestructure.Data.Identity
 {
@@ -21,17 +22,11 @@ namespace YouDo.Infraestructure.Data.Identity
             return authenticationResult.Succeeded;
         }
 
-        public async Task<bool> RegisterUser(string email, string password)
+        public async Task<IdentityResult> RegisterUser(User user, string password)
         {
-            var applicationUser = new User
-            {
-                UserName = email,
-                Email = email,
-            };
+            var createResult = await _userManager.CreateAsync(user, password);
 
-            var createResult = await _userManager.CreateAsync(applicationUser, password);
-
-            return createResult.Succeeded;
+            return createResult;
         }
 
         public async Task Logout()

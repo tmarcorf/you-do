@@ -9,6 +9,7 @@ namespace YouDo.Core.Enums
     public enum EnumGender
     {
         MALE,
-        FEMALE
+        FEMALE,
+        OTHER
     }
 }

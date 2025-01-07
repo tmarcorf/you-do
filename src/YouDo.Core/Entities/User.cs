@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using YouDo.Core.Enums;
 
-namespace YouDo.Infraestructure.Data.Identity
+namespace YouDo.Core.Entities
 {
     public class User : IdentityUser
     {

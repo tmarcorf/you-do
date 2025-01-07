@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using YouDo.Application.Interfaces;
 using YouDo.Application.Services;
 using YouDo.Core.Account;
+using YouDo.Core.Entities;
 using YouDo.Core.Interfaces;
 using YouDo.Infraestructure.Data.Context;
 using YouDo.Infraestructure.Data.Identity;
