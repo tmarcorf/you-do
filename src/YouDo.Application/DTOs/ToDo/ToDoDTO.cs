@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using YouDo.Core.Validations;
 
-namespace YouDo.Application.DTOs
+namespace YouDo.Application.DTOs.ToDo
 {
     public class ToDoDTO
     {
@@ -15,11 +15,11 @@ namespace YouDo.Application.DTOs
         [MaxLength(500, ErrorMessage = ToDoValidationMessages.INVALID_DETAILS_MAX_LENGTH)]
         public string Details { get; set; }
 
-        public DateTime CreatedAt { get;  set; }
+        public DateTime CreatedAt { get; set; }
 
-        public DateTime UpdatedAt { get;  set; }
+        public DateTime UpdatedAt { get; set; }
 
-        public bool Completed { get;  set; }
+        public bool Completed { get; set; }
 
         [Required(ErrorMessage = ToDoValidationMessages.INVALID_USER_ID)]
         public Guid UserId { get; set; }

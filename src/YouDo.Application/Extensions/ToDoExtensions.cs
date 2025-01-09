@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using YouDo.Application.DTOs;
+using YouDo.Application.DTOs.ToDo;
 using YouDo.Core.Entities;
 
 namespace YouDo.Application.Extensions
@@ -30,17 +31,16 @@ namespace YouDo.Application.Extensions
         {
             if (toDoDTO is null) return null;
 
-            var todo = new ToDo(
-                toDoDTO.Id,
-                toDoDTO.UserId,
-                toDoDTO.Title,
-                toDoDTO.Details,
-                toDoDTO.Completed);
-            
-            todo.CreatedAt = toDoDTO.CreatedAt;
-            todo.UpdatedAt = toDoDTO.UpdatedAt;
-
-            return todo;
+            return new ToDo
+            {
+                Id = toDoDTO.Id,
+                Title = toDoDTO.Title,
+                Details = toDoDTO.Details,
+                CreatedAt = toDoDTO.CreatedAt,
+                UpdatedAt = toDoDTO.UpdatedAt,
+                Completed = toDoDTO.Completed,
+                UserId = toDoDTO.UserId
+            };
         }
 
         public static IEnumerable<ToDo> ToEntityList(this IEnumerable<ToDoDTO> toDoDtoEntities)
@@ -57,6 +57,23 @@ namespace YouDo.Application.Extensions
             return toDoEntities.Select(ToDto);
         }
 
-        
+        public static ToDo ToEntity(this CreateToDoDTO createToDoDTO)
+        {
+            return new ToDo
+            {
+                Title = createToDoDTO.Title,
+                Details = createToDoDTO.Details,
+                UserId = createToDoDTO.UserId
+            };
+        }
+
+        public static ToDo ToEntity(this UpdateToDoDTO updateToDoDTO, ToDo toDo)
+        {
+            toDo.Title = updateToDoDTO.Title;
+            toDo.Details = updateToDoDTO.Details;
+            toDo.Completed = updateToDoDTO.Completed;
+
+            return toDo;
+        }
     }
 }

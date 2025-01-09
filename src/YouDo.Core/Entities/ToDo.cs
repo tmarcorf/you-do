@@ -16,18 +16,7 @@ namespace YouDo.Core.Entities
 
         public Guid UserId { get; set; }
 
-        public ToDo(Guid id, Guid userId, string title, string details, bool completed)
-        {
-            ValidateDomain(id, userId, title);
-
-            Id = id;
-            UserId = userId;
-            Title = title;
-            Details = details;
-            Completed = completed;
-        }
-
-        private void ValidateDomain(Guid id, Guid userId, string title)
+        public void ValidateDomain(Guid id, Guid userId, string title)
         {
             DomainExceptionValidation.When(id.Equals(Guid.Empty), ToDoValidationMessages.INVALID_ID);
             DomainExceptionValidation.When(userId.Equals(Guid.Empty), ToDoValidationMessages.INVALID_USER_ID);

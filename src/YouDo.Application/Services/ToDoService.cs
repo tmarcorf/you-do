@@ -1,6 +1,9 @@
-﻿using YouDo.Application.DTOs;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using YouDo.Application.DTOs.ToDo;
 using YouDo.Application.Extensions;
 using YouDo.Application.Interfaces;
+using YouDo.Core.Entities;
 using YouDo.Core.Interfaces;
 
 namespace YouDo.Application.Services
@@ -8,10 +11,12 @@ namespace YouDo.Application.Services
     public class ToDoService : IToDoService
     {
         private readonly IToDoRepository _repository;
+        private readonly UserManager<User> _userManager;
 
-        public ToDoService(IToDoRepository repository)
+        public ToDoService(IToDoRepository repository, UserManager<User> userManager)
         {
             _repository = repository;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<ToDoDTO>> GetAllFromUserAsync(Guid userId)
@@ -35,28 +40,45 @@ namespace YouDo.Application.Services
             return toDo.ToDto();
         }
 
-        public async Task CreateAsync(ToDoDTO toDoDto)
+        public async Task<ToDoDTO> CreateAsync(CreateToDoDTO createToDoDTO)
         {
-            toDoDto.Id = Guid.NewGuid();
-            toDoDto.CreatedAt = DateTime.UtcNow;
-            toDoDto.Completed = false;
+            var toDo = createToDoDTO.ToEntity();
 
-            var toDoEntity = toDoDto.ToEntity();
+            toDo.Id = Guid.NewGuid();
+            toDo.CreatedAt = DateTime.UtcNow;
+            toDo.UpdatedAt = DateTime.UtcNow;
+            toDo.Completed = false;
 
-            await _repository.CreateAsync(toDoEntity);
+            if (!await _userManager.Users.AnyAsync(x => x.Id == toDo.UserId.ToString())) return null;
+
+            toDo.ValidateDomain(toDo.Id, toDo.UserId, toDo.Title);
+            await _repository.CreateAsync(toDo);
+
+            return toDo.ToDto();
         }
 
-        public async Task UpdateAsync(ToDoDTO toDoDto)
+        public async Task<ToDoDTO> UpdateAsync(UpdateToDoDTO updateToDoDTO)
         {
-            toDoDto.UpdatedAt = DateTime.UtcNow;
-            var toDoEntity = toDoDto.ToEntity();
+            var toDo = await _repository.GetByIdAsync(updateToDoDTO.Id);
 
-            await _repository.UpdateAsync(toDoEntity);
+            if (toDo == null) return null;
+
+            toDo = updateToDoDTO.ToEntity(toDo);
+            toDo.UpdatedAt = DateTime.UtcNow;
+
+            toDo.ValidateDomain(updateToDoDTO.Id, updateToDoDTO.UserId, updateToDoDTO.Title);
+            await _repository.UpdateAsync(toDo);
+
+            return toDo.ToDto();
         }
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            return await _repository.DeleteAsync(id);
+            var toDo = await _repository.GetByIdAsync(id);
+
+            if (toDo == null) return false;
+
+            return await _repository.DeleteAsync(toDo);
         }
     }
 }

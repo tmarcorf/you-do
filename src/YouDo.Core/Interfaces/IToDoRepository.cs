@@ -19,6 +19,6 @@ namespace YouDo.Core.Interfaces
 
         Task<ToDo> UpdateAsync(ToDo toDo);
 
-        Task<bool> DeleteAsync(Guid id);
+        Task<bool> DeleteAsync(ToDo toDo);
     }
 }

@@ -58,7 +58,7 @@ namespace YouDo.Application.Services
                         _configuration["Jwt:SecretKey"])));
 
             var credentials = new SigningCredentials(privateKey, SecurityAlgorithms.HmacSha256);
-            var expiration = DateTime.Now.AddMinutes(5);
+            var expiration = DateTime.Now.AddHours(2);
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],

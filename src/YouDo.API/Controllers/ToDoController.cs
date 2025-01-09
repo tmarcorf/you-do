@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using YouDo.API.Extensions;
-using YouDo.API.Models.ToDo;
-using YouDo.Application.DTOs;
+using YouDo.Application.DTOs.ToDo;
 using YouDo.Application.Interfaces;
 
 namespace YouDo.API.Controllers
@@ -56,23 +53,27 @@ namespace YouDo.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create([FromBody] CreateToDoModel createToDoModel)
+        public async Task<ActionResult> Create([FromBody] CreateToDoDTO createToDoModel)
         {
             if (createToDoModel == null) return BadRequest("Invalid data");
 
-            await _service.CreateAsync(createToDoModel.ToDto());
+            var toDoDTO = await _service.CreateAsync(createToDoModel);
 
-            return new CreatedResult();
+            if (toDoDTO == null) return BadRequest("Invalid data");
+
+            return Ok(toDoDTO);
         }
 
         [HttpPut]
-        public async Task<ActionResult> Update([FromBody] UpdateToDoModel updateTodoModel)
+        public async Task<ActionResult> Update([FromBody] UpdateToDoDTO updateTodoModel)
         {
             if (updateTodoModel == null) return BadRequest("Invalid data");
 
-            await _service.UpdateAsync(updateTodoModel.ToDto());
+            var toDoDTO = await _service.UpdateAsync(updateTodoModel);
 
-            return Ok(updateTodoModel);
+            if (toDoDTO == null) return BadRequest("Invalid data");
+
+            return Ok(toDoDTO);
         }
 
         [HttpDelete("{id}")]

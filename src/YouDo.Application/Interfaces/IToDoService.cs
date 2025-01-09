@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using YouDo.Application.DTOs;
+using YouDo.Application.DTOs.ToDo;
 using YouDo.Core.Entities;
 
 namespace YouDo.Application.Interfaces
@@ -16,9 +16,9 @@ namespace YouDo.Application.Interfaces
 
         Task<ToDoDTO> GetByIdAsync(Guid id);
 
-        Task CreateAsync(ToDoDTO toDoDto);
+        Task<ToDoDTO> CreateAsync(CreateToDoDTO createToDoDTO);
 
-        Task UpdateAsync(ToDoDTO toDoDto);
+        Task<ToDoDTO> UpdateAsync(UpdateToDoDTO updateToDoDTO);
 
         Task<bool> DeleteAsync(Guid id);
     }

@@ -76,12 +76,8 @@ namespace YouDo.Infraestructure.Data.Repositories
             return toDo;
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(ToDo toDo)
         {
-            var toDo = await _context.ToDos.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (toDo == null) return false;
-
             _context.ToDos.Remove(toDo);
             await _context.SaveChangesAsync();
 
