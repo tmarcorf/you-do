@@ -5,7 +5,7 @@ using YouDo.Application.Interfaces;
 
 namespace YouDo.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/todo")]
     [ApiController]
     [Authorize]
     public class ToDoController : ControllerBase
@@ -52,7 +52,7 @@ namespace YouDo.API.Controllers
             return Ok(toDo);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<ActionResult> Create([FromBody] CreateToDoDTO createToDoModel)
         {
             if (createToDoModel == null) return BadRequest("Invalid data");
@@ -64,7 +64,7 @@ namespace YouDo.API.Controllers
             return Ok(toDoDTO);
         }
 
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<ActionResult> Update([FromBody] UpdateToDoDTO updateTodoModel)
         {
             if (updateTodoModel == null) return BadRequest("Invalid data");

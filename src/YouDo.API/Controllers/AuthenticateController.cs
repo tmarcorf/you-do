@@ -6,7 +6,7 @@ using YouDo.Application.Interfaces;
 
 namespace YouDo.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
