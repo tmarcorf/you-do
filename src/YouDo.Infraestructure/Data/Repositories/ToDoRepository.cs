@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using YouDo.Core.Entities;
 using YouDo.Core.Interfaces;
 using YouDo.Infraestructure.Data.Context;
@@ -10,7 +11,7 @@ namespace YouDo.Infraestructure.Data.Repositories
     {
         private ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
-
+        private const int NUMBER_OF_OBJECTS_PER_PAGE = 10;
 
         public ToDoRepository(ApplicationDbContext context, UserManager<User> userManager)
         {
@@ -18,7 +19,7 @@ namespace YouDo.Infraestructure.Data.Repositories
             _userManager = userManager;
         }
 
-        public async Task<IEnumerable<ToDo>> GetAllFromUserAsync(Guid userId)
+        public async Task<IEnumerable<ToDo>> GetAllFromUserAsync(Guid userId, int skip, int take)
         {
             if (userId.Equals(Guid.Empty)) return Enumerable.Empty<ToDo>();
 
@@ -29,12 +30,14 @@ namespace YouDo.Infraestructure.Data.Repositories
             var toDoList = await _context
                 .ToDos
                 .Where(x => x.UserId == userId)
+                .Skip(skip * NUMBER_OF_OBJECTS_PER_PAGE)
+                .Take(take)
                 .ToListAsync();
 
             return toDoList;
         }
 
-        public async Task<IEnumerable<ToDo>> GetAllFromUserWithSpecifiedCreationDateAsync(Guid userId, DateTime creationDate)
+        public async Task<IEnumerable<ToDo>> GetAllFromUserWithSpecifiedCreationDateAsync(Guid userId, DateTime creationDate, int skip, int take)
         {
             if (userId.Equals(Guid.Empty)) return Enumerable.Empty<ToDo>();
 
@@ -46,6 +49,8 @@ namespace YouDo.Infraestructure.Data.Repositories
                 .ToDos
                 .Where(x => x.UserId == userId && 
                             x.CreatedAt.Date == creationDate.Date)
+                .Skip(skip * NUMBER_OF_OBJECTS_PER_PAGE)
+                .Take(take)
                 .ToListAsync();
 
             return toDoList;

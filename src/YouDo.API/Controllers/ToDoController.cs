@@ -10,31 +10,39 @@ namespace YouDo.API.Controllers
     [Authorize]
     public class ToDoController : ControllerBase
     {
+        private const int DEFAULT_SKIP = 0;
+        private const int DEFAULT_TAKE = 10;
+        private const int LIMIT_TAKE = 30;
         private readonly IToDoService _service;
+
 
         public ToDoController(IToDoService service)
         {
             _service = service;
         }
 
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<IEnumerable<ToDoDTO>>> GetAllFromUser(string userId)
+        [HttpGet("{userId}/{skip}/{take}")]
+        public async Task<ActionResult<IEnumerable<ToDoDTO>>> GetAllFromUser(string userId, int skip = DEFAULT_SKIP, int take = DEFAULT_TAKE)
         {
             Guid userIdGuid;
             if (!Guid.TryParse(userId, out userIdGuid)) return NotFound("ToDos not found");
 
-            var toDos = await _service.GetAllFromUserAsync(userIdGuid);
+            if (take > LIMIT_TAKE) return BadRequest($"The limit of items per page is {LIMIT_TAKE}");
+
+            var toDos = await _service.GetAllFromUserAsync(userIdGuid, skip, take);
 
             return Ok(toDos);
         }
 
         [HttpGet("{userId}/{creationDate}")]
-        public async Task<ActionResult<IEnumerable<ToDoDTO>>> GetAllFromUserWithSpecifiedCreationDate(string userId, DateTime creationDate)
+        public async Task<ActionResult<IEnumerable<ToDoDTO>>> GetAllFromUserWithSpecifiedCreationDate(string userId, DateTime creationDate, int skip = DEFAULT_SKIP, int take = DEFAULT_TAKE)
         {
             Guid userIdGuid;
             if (!Guid.TryParse(userId, out userIdGuid)) return NotFound("ToDos not found");
 
-            var toDos = await _service.GetAllFromUserWithSpecifiedCreationDateAsync(userIdGuid, creationDate);
+            if (take > LIMIT_TAKE) return BadRequest($"The limit of items per page is {LIMIT_TAKE}");
+
+            var toDos = await _service.GetAllFromUserWithSpecifiedCreationDateAsync(userIdGuid, creationDate, skip, take);
 
             return Ok(toDos);
         }

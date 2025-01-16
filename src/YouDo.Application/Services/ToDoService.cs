@@ -19,16 +19,16 @@ namespace YouDo.Application.Services
             _userManager = userManager;
         }
 
-        public async Task<IEnumerable<ToDoDTO>> GetAllFromUserAsync(Guid userId)
+        public async Task<IEnumerable<ToDoDTO>> GetAllFromUserAsync(Guid userId, int skip, int take)
         {
-            var toDoEntities = await _repository.GetAllFromUserAsync(userId);
+            var toDoEntities = await _repository.GetAllFromUserAsync(userId, skip, take);
 
             return toDoEntities.ToDtoList();
         }
 
-        public async Task<IEnumerable<ToDoDTO>> GetAllFromUserWithSpecifiedCreationDateAsync(Guid userId, DateTime creationDate)
+        public async Task<IEnumerable<ToDoDTO>> GetAllFromUserWithSpecifiedCreationDateAsync(Guid userId, DateTime creationDate, int skip, int take)
         {
-            var toDoEntities = await _repository.GetAllFromUserWithSpecifiedCreationDateAsync(userId, creationDate);
+            var toDoEntities = await _repository.GetAllFromUserWithSpecifiedCreationDateAsync(userId, creationDate, skip, take);
 
             return toDoEntities.ToDtoList();
         }
@@ -45,8 +45,8 @@ namespace YouDo.Application.Services
             var toDo = createToDoDTO.ToEntity();
 
             toDo.Id = Guid.NewGuid();
-            toDo.CreatedAt = DateTime.UtcNow;
-            toDo.UpdatedAt = DateTime.UtcNow;
+            toDo.CreatedAt = DateTime.UtcNow.AddDays(1);
+            toDo.UpdatedAt = DateTime.UtcNow.AddDays(1);
             toDo.Completed = false;
 
             if (!await _userManager.Users.AnyAsync(x => x.Id == toDo.UserId.ToString())) return null;

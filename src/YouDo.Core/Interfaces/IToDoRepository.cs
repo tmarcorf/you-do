@@ -9,9 +9,9 @@ namespace YouDo.Core.Interfaces
 {
     public interface IToDoRepository
     {
-        Task<IEnumerable<ToDo>> GetAllFromUserAsync(Guid userId);
+        Task<IEnumerable<ToDo>> GetAllFromUserAsync(Guid userId, int skip, int take);
 
-        Task<IEnumerable<ToDo>> GetAllFromUserWithSpecifiedCreationDateAsync(Guid userId, DateTime creationDate);
+        Task<IEnumerable<ToDo>> GetAllFromUserWithSpecifiedCreationDateAsync(Guid userId, DateTime creationDate, int skip, int take);
 
         Task<ToDo> GetByIdAsync(Guid id);
 

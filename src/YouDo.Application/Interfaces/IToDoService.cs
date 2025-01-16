@@ -10,9 +10,9 @@ namespace YouDo.Application.Interfaces
 {
     public interface IToDoService
     {
-        Task<IEnumerable<ToDoDTO>> GetAllFromUserAsync(Guid userId);
+        Task<IEnumerable<ToDoDTO>> GetAllFromUserAsync(Guid userId, int skip, int take);
 
-        Task<IEnumerable<ToDoDTO>> GetAllFromUserWithSpecifiedCreationDateAsync(Guid userId, DateTime creationDate);
+        Task<IEnumerable<ToDoDTO>> GetAllFromUserWithSpecifiedCreationDateAsync(Guid userId, DateTime creationDate, int skip, int take);
 
         Task<ToDoDTO> GetByIdAsync(Guid id);
 
