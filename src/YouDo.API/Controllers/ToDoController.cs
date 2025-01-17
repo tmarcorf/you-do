@@ -34,7 +34,7 @@ namespace YouDo.API.Controllers
             return Ok(toDos);
         }
 
-        [HttpGet("{userId}/{creationDate}")]
+        [HttpGet("{userId}/{creationDate}/{skip}/{take}")]
         public async Task<ActionResult<IEnumerable<ToDoDTO>>> GetAllFromUserWithSpecifiedCreationDate(string userId, DateTime creationDate, int skip = DEFAULT_SKIP, int take = DEFAULT_TAKE)
         {
             Guid userIdGuid;
@@ -47,7 +47,7 @@ namespace YouDo.API.Controllers
             return Ok(toDos);
         }
 
-        [HttpGet("specific/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ToDoDTO>> GetById(string id)
         {
             Guid idGuid;

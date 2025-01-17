@@ -11,7 +11,6 @@ namespace YouDo.Infraestructure.Data.Repositories
     {
         private ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
-        private const int NUMBER_OF_OBJECTS_PER_PAGE = 10;
 
         public ToDoRepository(ApplicationDbContext context, UserManager<User> userManager)
         {
@@ -30,7 +29,7 @@ namespace YouDo.Infraestructure.Data.Repositories
             var toDoList = await _context
                 .ToDos
                 .Where(x => x.UserId == userId)
-                .Skip(skip * NUMBER_OF_OBJECTS_PER_PAGE)
+                .Skip(skip)
                 .Take(take)
                 .ToListAsync();
 
@@ -49,7 +48,7 @@ namespace YouDo.Infraestructure.Data.Repositories
                 .ToDos
                 .Where(x => x.UserId == userId && 
                             x.CreatedAt.Date == creationDate.Date)
-                .Skip(skip * NUMBER_OF_OBJECTS_PER_PAGE)
+                .Skip(skip)
                 .Take(take)
                 .ToListAsync();
 
