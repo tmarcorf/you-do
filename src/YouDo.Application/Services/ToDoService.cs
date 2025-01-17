@@ -59,6 +59,8 @@ namespace YouDo.Application.Services
 
         public async Task<ToDoDTO> UpdateAsync(UpdateToDoDTO updateToDoDTO)
         {
+            if (!await _userManager.Users.AnyAsync(x => x.Id == updateToDoDTO.UserId.ToString())) return null;
+
             var toDo = await _repository.GetByIdAsync(updateToDoDTO.Id);
 
             if (toDo == null) return null;
