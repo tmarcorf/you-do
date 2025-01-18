@@ -27,4 +27,8 @@
     <ProjectReference Include="..\YouDo.Core\YouDo.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

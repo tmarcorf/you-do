@@ -49,7 +49,7 @@ namespace YouDo.Application.Services
             toDo.UpdatedAt = DateTime.UtcNow.AddDays(1);
             toDo.Completed = false;
 
-            if (!await _userManager.Users.AnyAsync(x => x.Id == toDo.UserId.ToString())) return null;
+            if (!await _userManager.Users.AnyAsync(x => x.Id == toDo.UserId)) return null;
 
             toDo.ValidateDomain(toDo.Id, toDo.UserId, toDo.Title);
             await _repository.CreateAsync(toDo);
@@ -59,7 +59,7 @@ namespace YouDo.Application.Services
 
         public async Task<ToDoDTO> UpdateAsync(UpdateToDoDTO updateToDoDTO)
         {
-            if (!await _userManager.Users.AnyAsync(x => x.Id == updateToDoDTO.UserId.ToString())) return null;
+            if (!await _userManager.Users.AnyAsync(x => x.Id == updateToDoDTO.UserId)) return null;
 
             var toDo = await _repository.GetByIdAsync(updateToDoDTO.Id);
 

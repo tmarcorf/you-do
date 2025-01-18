@@ -24,7 +24,7 @@ namespace YouDo.Infraestructure.IoC
                 options => options.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
             );
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 

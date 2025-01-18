@@ -9,13 +9,11 @@ namespace YouDo.Infraestructure.Data.DataCofiguration
         public void Configure(EntityTypeBuilder<ToDo> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).HasColumnName("ID").HasMaxLength(40);
-            builder.Property(x => x.Title).HasColumnName("TITLE").HasMaxLength(100).IsRequired();
-            builder.Property(x => x.Details).HasColumnName("DETAILS").HasMaxLength(500);
-            builder.Property(x => x.CreatedAt).HasColumnName("CREATEDAT");
-            builder.Property(x => x.UpdatedAt).HasColumnName("UPDATEDAT");
-            builder.Property(x => x.Completed).HasColumnName("COMPLETED").HasDefaultValue(false);
-            builder.Property(x => x.UserId).HasColumnName("USERID").HasMaxLength(40).IsRequired();
+            builder.Property(x => x.Id).HasMaxLength(40);
+            builder.Property(x => x.Title).HasMaxLength(100).IsRequired();
+            builder.Property(x => x.Details).HasMaxLength(500);
+            builder.Property(x => x.Completed).HasDefaultValue(false);
+            builder.HasOne(x => x.User).WithMany(x => x.ToDos);
         }
     }
 }

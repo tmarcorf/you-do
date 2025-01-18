@@ -3,7 +3,7 @@ using YouDo.Core.Enums;
 
 namespace YouDo.Core.Entities
 {
-    public class User : IdentityUser
+    public class User : IdentityUser<Guid>
     {
         public string FirstName { get; set; }
 
@@ -12,5 +12,7 @@ namespace YouDo.Core.Entities
         public EnumGender Gender { get; set; }
 
         public DateTime DateOfBirth { get; set; }
+
+        public IEnumerable<ToDo> ToDos { get; set; }
     }
 }
