@@ -11,7 +11,6 @@ namespace YouDo.API.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly IAuthenticateService _authenticateService;
-        private readonly IConfiguration _configuration;
 
         public AuthenticateController(IAuthenticateService authenticateService)
         {
