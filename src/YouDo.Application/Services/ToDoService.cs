@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using YouDo.Application.DTOs.ToDo;
 using YouDo.Application.Extensions;
 using YouDo.Application.Interfaces;
+using YouDo.Application.Results;
+using YouDo.Application.Results.ToDo;
 using YouDo.Core.Entities;
 using YouDo.Core.Interfaces;
 
@@ -12,6 +14,9 @@ namespace YouDo.Application.Services
     {
         private readonly IToDoRepository _repository;
         private readonly UserManager<User> _userManager;
+        private const int TITLE_MIN_LENGTH = 5;
+        private const int TITLE_MAX_LENGTH = 100;
+        private const int DETAILS_MAX_LENGTH = 500;
 
         public ToDoService(IToDoRepository repository, UserManager<User> userManager)
         {
@@ -19,68 +24,124 @@ namespace YouDo.Application.Services
             _userManager = userManager;
         }
 
-        public async Task<IEnumerable<ToDoDTO>> GetAllFromUserAsync(Guid userId, int skip, int take)
+        public async Task<Result<IEnumerable<ToDoDTO>>> GetAllFromUserAsync(Guid userId, int skip, int take)
         {
+            if (userId.Equals(Guid.Empty))
+            {
+                return Result<IEnumerable<ToDoDTO>>.Failure(ToDoErrors.InvalidUserId);
+            }
+
             var toDoEntities = await _repository.GetAllFromUserAsync(userId, skip, take);
 
-            return toDoEntities.ToDtoList();
+            return Result<IEnumerable<ToDoDTO>>.Success(toDoEntities.ToDtoList());
         }
 
-        public async Task<IEnumerable<ToDoDTO>> GetAllFromUserWithSpecifiedCreationDateAsync(Guid userId, DateTime creationDate, int skip, int take)
+        public async Task<Result<IEnumerable<ToDoDTO>>> GetAllFromUserWithSpecifiedCreationDateAsync(Guid userId, DateTime creationDate, int skip, int take)
         {
+            if (userId.Equals(Guid.Empty))
+            {
+                return Result<IEnumerable<ToDoDTO>>.Failure(ToDoErrors.InvalidUserId);
+            }
+
+            if (creationDate.Equals(DateTime.MinValue))
+            {
+                return Result<IEnumerable<ToDoDTO>>.Failure(ToDoErrors.InvalidCreationDate);
+            }
+
             var toDoEntities = await _repository.GetAllFromUserWithSpecifiedCreationDateAsync(userId, creationDate, skip, take);
 
-            return toDoEntities.ToDtoList();
+            return Result<IEnumerable<ToDoDTO>>.Success(toDoEntities.ToDtoList());
         }
 
-        public async Task<ToDoDTO> GetByIdAsync(Guid id)
+        public async Task<Result<ToDoDTO>> GetByIdAsync(Guid id)
         {
+            if (id.Equals(Guid.Empty))
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidId);
+            }
+
             var toDo = await _repository.GetByIdAsync(id);
 
-            return toDo.ToDto();
+            if (toDo == null)
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidId);
+            }
+
+            return Result<ToDoDTO>.Success(toDo.ToDto());
         }
 
-        public async Task<ToDoDTO> CreateAsync(CreateToDoDTO createToDoDTO)
+        public async Task<Result<ToDoDTO>> CreateAsync(CreateToDoDTO createToDoDTO)
         {
             var toDo = createToDoDTO.ToEntity();
-
             toDo.Id = Guid.NewGuid();
-            toDo.CreatedAt = DateTime.UtcNow.AddDays(1);
-            toDo.UpdatedAt = DateTime.UtcNow.AddDays(1);
+            toDo.CreatedAt = DateTime.UtcNow;
+            toDo.UpdatedAt = DateTime.UtcNow;
             toDo.Completed = false;
 
-            if (!await _userManager.Users.AnyAsync(x => x.Id == toDo.UserId)) return null;
+            var result = GetOperationResult(toDo);
 
-            toDo.ValidateDomain(toDo.Id, toDo.UserId, toDo.Title);
-            await _repository.CreateAsync(toDo);
+            if (result.IsSuccess) await _repository.CreateAsync(toDo);
 
-            return toDo.ToDto();
+            return result;
         }
 
-        public async Task<ToDoDTO> UpdateAsync(UpdateToDoDTO updateToDoDTO)
+        public async Task<Result<ToDoDTO>> UpdateAsync(UpdateToDoDTO updateToDoDTO)
         {
-            if (!await _userManager.Users.AnyAsync(x => x.Id == updateToDoDTO.UserId)) return null;
-
             var toDo = await _repository.GetByIdAsync(updateToDoDTO.Id);
 
-            if (toDo == null) return null;
-
+            if (toDo == null) return Result<ToDoDTO>.Failure(ToDoErrors.InvalidId);
+            
             toDo = updateToDoDTO.ToEntity(toDo);
             toDo.UpdatedAt = DateTime.UtcNow;
 
-            toDo.ValidateDomain(updateToDoDTO.Id, updateToDoDTO.UserId, updateToDoDTO.Title);
-            await _repository.UpdateAsync(toDo);
+            var result = GetOperationResult(toDo);
 
-            return toDo.ToDto();
+            if (result.IsSuccess) await _repository.UpdateAsync(toDo);
+
+            return result;
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<Result<bool>> DeleteAsync(Guid id)
         {
             var toDo = await _repository.GetByIdAsync(id);
 
-            if (toDo == null) return false;
+            if (toDo == null) return Result<bool>.Failure(ToDoErrors.InvalidId);
 
-            return await _repository.DeleteAsync(toDo);
+            var deleted = await _repository.DeleteAsync(toDo);
+
+            return Result<bool>.Success(deleted);
+
+        }
+
+        private Result<ToDoDTO> GetOperationResult(ToDo toDo)
+        {
+            if (!_userManager.Users.AnyAsync(x => x.Id == toDo.UserId).Result)
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidUserId);
+            }
+
+            if (string.IsNullOrEmpty(toDo.Title))
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitle);
+            }
+
+            if (toDo.Title.Length < TITLE_MIN_LENGTH)
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitleLength);
+            }
+
+            if (toDo.Title.Length > TITLE_MAX_LENGTH)
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitleMaxLength);
+            }
+
+            if (!string.IsNullOrEmpty(toDo.Details) &&
+                toDo.Details.Length > DETAILS_MAX_LENGTH)
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidDetailsMaxLength);
+            }
+
+            return Result<ToDoDTO>.Success(toDo.ToDto());
         }
     }
 }

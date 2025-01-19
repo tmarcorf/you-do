@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using YouDo.Application.DTOs.ToDo;
 using YouDo.Application.Interfaces;
+using YouDo.Application.Results;
 
 namespace YouDo.API.Controllers
 {
@@ -22,42 +23,46 @@ namespace YouDo.API.Controllers
         }
 
         [HttpGet("{userId}/{skip}/{take}")]
-        public async Task<ActionResult<IEnumerable<ToDoDTO>>> GetAllFromUser(string userId, int skip = DEFAULT_SKIP, int take = DEFAULT_TAKE)
+        public async Task<ActionResult> GetAllFromUser(string userId, int skip = DEFAULT_SKIP, int take = DEFAULT_TAKE)
         {
             Guid userIdGuid;
             if (!Guid.TryParse(userId, out userIdGuid)) return NotFound("ToDos not found");
 
             if (take > LIMIT_TAKE) return BadRequest($"The limit of items per page is {LIMIT_TAKE}");
 
-            var toDos = await _service.GetAllFromUserAsync(userIdGuid, skip, take);
+            var result = await _service.GetAllFromUserAsync(userIdGuid, skip, take);
 
-            return Ok(toDos);
+            if (!result.IsSuccess) return BadRequest(result.Error);
+
+            return Ok(result);
         }
 
         [HttpGet("{userId}/{creationDate}/{skip}/{take}")]
-        public async Task<ActionResult<IEnumerable<ToDoDTO>>> GetAllFromUserWithSpecifiedCreationDate(string userId, DateTime creationDate, int skip = DEFAULT_SKIP, int take = DEFAULT_TAKE)
+        public async Task<ActionResult> GetAllFromUserWithSpecifiedCreationDate(string userId, DateTime creationDate, int skip = DEFAULT_SKIP, int take = DEFAULT_TAKE)
         {
             Guid userIdGuid;
             if (!Guid.TryParse(userId, out userIdGuid)) return NotFound("ToDos not found");
 
             if (take > LIMIT_TAKE) return BadRequest($"The limit of items per page is {LIMIT_TAKE}");
 
-            var toDos = await _service.GetAllFromUserWithSpecifiedCreationDateAsync(userIdGuid, creationDate, skip, take);
+            var result = await _service.GetAllFromUserWithSpecifiedCreationDateAsync(userIdGuid, creationDate, skip, take);
 
-            return Ok(toDos);
+            if (!result.IsSuccess) return BadRequest(result.Error);
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ToDoDTO>> GetById(string id)
+        public async Task<ActionResult> GetById(string id)
         {
             Guid idGuid;
             if (!Guid.TryParse(id, out idGuid)) return NotFound("ToDo not found");
 
-            var toDo = await _service.GetByIdAsync(idGuid);
+            var result = await _service.GetByIdAsync(idGuid);
 
-            if (toDo == null) return NotFound("ToDo not found");
+            if (!result.IsSuccess) return BadRequest(result.Error);
 
-            return Ok(toDo);
+            return Ok(result);
         }
 
         [HttpPost("create")]
@@ -65,11 +70,11 @@ namespace YouDo.API.Controllers
         {
             if (createToDoModel == null) return BadRequest("Invalid data");
 
-            var toDoDTO = await _service.CreateAsync(createToDoModel);
+            var result = await _service.CreateAsync(createToDoModel);
 
-            if (toDoDTO == null) return BadRequest("Invalid data");
+            if (!result.IsSuccess) return BadRequest(result.Error);
 
-            return Ok(toDoDTO);
+            return Ok(result);
         }
 
         [HttpPut("update")]
@@ -77,26 +82,24 @@ namespace YouDo.API.Controllers
         {
             if (updateTodoModel == null) return BadRequest("Invalid data");
 
-            var toDoDTO = await _service.UpdateAsync(updateTodoModel);
+            var result = await _service.UpdateAsync(updateTodoModel);
 
-            if (toDoDTO == null) return BadRequest("Invalid data");
+            if (!result.IsSuccess) return BadRequest(result.Error);
 
-            return Ok(toDoDTO);
+            return Ok(result);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ToDoDTO>> Delete(string id)
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult> Delete(string id)
         {
             Guid idGuid;
             if (!Guid.TryParse(id, out idGuid)) return NotFound("ToDo not found");
 
-            var toDo = await _service.GetByIdAsync(idGuid);
+            var result = await _service.DeleteAsync(idGuid);
 
-            if (toDo == null) return NotFound("ToDo not found");
+            if (!result.IsSuccess) return BadRequest(result.Error);
 
-            await _service.DeleteAsync(idGuid);
-
-            return Ok(toDo);
+            return Ok(result);
         }
     }
 }

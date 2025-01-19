@@ -10,7 +10,6 @@ namespace YouDo.Application.DTOs.ToDo
 {
     public class UpdateToDoDTO : CreateToDoDTO
     {
-        [Required(ErrorMessage = ToDoValidationMessages.INVALID_ID)]
         public Guid Id { get; set; }
 
         public bool Completed { get; set; }
