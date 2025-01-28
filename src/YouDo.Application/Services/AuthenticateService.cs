@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using YouDo.Application.DTOs;
 using YouDo.Application.Interfaces;
+using YouDo.Application.Results;
 using YouDo.Core.Entities;
 
 namespace YouDo.Application.Services
@@ -23,7 +24,7 @@ namespace YouDo.Application.Services
             _configuration = configuration;
         }
 
-        public async Task<UserTokenDTO> Authenticate(string email, string password)
+        public async Task<Result<UserTokenDTO>> Authenticate(string email, string password)
         {
             var authenticationResult = await _signInManager.PasswordSignInAsync(email, password, false, false);
 
@@ -44,7 +45,7 @@ namespace YouDo.Application.Services
             await _signInManager.SignOutAsync();
         }
 
-        private UserTokenDTO GenerateToken(string email)
+        private Result<UserTokenDTO> GenerateToken(string email)
         {
             var claims = new[]
             {
@@ -68,11 +69,13 @@ namespace YouDo.Application.Services
                 signingCredentials: credentials
                 );
 
-            return new UserTokenDTO()
+            var userTokenDto = new UserTokenDTO()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration
             };
+
+            return Result<UserTokenDTO>.Success(userTokenDto);
         }
     }
 }

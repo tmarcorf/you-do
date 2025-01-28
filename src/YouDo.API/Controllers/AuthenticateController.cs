@@ -30,15 +30,15 @@ namespace YouDo.API.Controllers
         }
 
         [HttpPost("login-user")]
-        public async Task<ActionResult<UserTokenDTO>> Login(LoginModel loginModel)
+        public async Task<ActionResult> Login(LoginModel loginModel)
         {
             if (loginModel == null) return BadRequest("Invalid data");
 
-            var token = await _authenticateService.Authenticate(loginModel.Email, loginModel.Password);
+            var result = await _authenticateService.Authenticate(loginModel.Email, loginModel.Password);
 
-            if (token == null) return NotFound("Invalid login attempt");
+            if (!result.IsSuccess) return NotFound(result.Error.Description);
 
-            return Ok(token);
+            return Ok(result.Data);
         }
     }
 }
