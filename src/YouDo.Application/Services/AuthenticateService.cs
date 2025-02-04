@@ -7,6 +7,7 @@ using System.Text;
 using YouDo.Application.DTOs;
 using YouDo.Application.Interfaces;
 using YouDo.Application.Results;
+using YouDo.Application.Results.Authenticate;
 using YouDo.Core.Entities;
 
 namespace YouDo.Application.Services
@@ -28,16 +29,26 @@ namespace YouDo.Application.Services
         {
             var authenticationResult = await _signInManager.PasswordSignInAsync(email, password, false, false);
 
-            if (!authenticationResult.Succeeded) return null;
+            if (!authenticationResult.Succeeded)
+            {
+                return Result<UserTokenDTO>.Failure(AuthenticateErrors.InvalidEmailOrPassword);
+            }
 
             return GenerateToken(email);
         }
 
-        public async Task<IdentityResult> RegisterUser(User user, string password)
+        public async Task<Result<IdentityResult>> RegisterUser(User user, string password)
         {
             var createResult = await _userManager.CreateAsync(user, password);
 
-            return createResult;
+            if (!createResult.Succeeded)
+            {
+                var errorMessages = string.Join(", ", createResult.Errors.Select(x => x.Description));
+
+                return Result<IdentityResult>.Failure(AuthenticateErrors.CustomError(errorMessages));
+            }
+
+            return Result<IdentityResult>.Success(createResult);
         }
 
         public async Task Logout()

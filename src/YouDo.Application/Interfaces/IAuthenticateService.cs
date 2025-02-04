@@ -9,7 +9,7 @@ namespace YouDo.Application.Interfaces
     {
         Task<Result<UserTokenDTO>> Authenticate(string email, string password);
 
-        Task<IdentityResult> RegisterUser(User user, string password);
+        Task<Result<IdentityResult>> RegisterUser(User user, string password);
 
         Task Logout();
     }

@@ -24,7 +24,7 @@ namespace YouDo.API.Controllers
 
             var createResult = await _authenticateService.RegisterUser(createUserModel.ToEntity(), createUserModel.Password);
 
-            if (!createResult.Succeeded) return BadRequest(createResult);
+            if (!createResult.IsSuccess) return BadRequest(createResult);
 
             return Ok($"User {createUserModel.Email} was successfully created");
         }
