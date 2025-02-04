@@ -1,13 +1,11 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET
+name: CI Production
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "develop" ]
 
 jobs:
   build:
@@ -20,10 +18,19 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Build and Test
-      run: |
+    - name: Restore dependencies
+      run: | 
         cd src
         dotnet restore
+
+    - name: Build solution
+      run: |
+        cd src
         dotnet build --no-restore
+
+    - name: Run tests
+      run: |
+        cd src
+        dotnet test -t
         dotnet test --no-build --verbosity normal
 
