@@ -7,15 +7,12 @@ namespace YouDo.API.Extensions
     {
         public static User ToEntity(this CreateUserModel createUserModel)
         {
-            return new User
-            {
-                Email = createUserModel.Email,
-                UserName = createUserModel.Email,
-                FirstName = createUserModel.FirstName,
-                LastName = createUserModel.LastName,
-                Gender = createUserModel.Gender,
-                DateOfBirth = createUserModel.DateOfBirth
-            };
+            return new User(
+                createUserModel.Email,
+                createUserModel.FirstName,
+                createUserModel.LastName,
+                createUserModel.DateOfBirth,
+                createUserModel.Gender);
         }
     }
 }
