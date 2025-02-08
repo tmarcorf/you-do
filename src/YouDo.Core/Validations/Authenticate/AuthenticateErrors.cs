@@ -1,6 +1,10 @@
-﻿using YouDo.Core.Validations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace YouDo.Application.Results.Authenticate
+namespace YouDo.Core.Validations.Authenticate
 {
     public static class AuthenticateErrors
     {

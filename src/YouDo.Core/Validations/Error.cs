@@ -1,4 +1,4 @@
-﻿namespace YouDo.Application.Results
+﻿namespace YouDo.Core.Validations
 {
     public class Error
     {

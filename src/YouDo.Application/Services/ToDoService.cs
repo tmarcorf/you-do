@@ -4,9 +4,9 @@ using YouDo.Application.DTOs.ToDo;
 using YouDo.Application.Extensions;
 using YouDo.Application.Interfaces;
 using YouDo.Application.Results;
-using YouDo.Application.Results.ToDo;
 using YouDo.Core.Entities;
 using YouDo.Core.Interfaces;
+using YouDo.Core.Validations.ToDo;
 
 namespace YouDo.Application.Services
 {

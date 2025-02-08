@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace YouDo.Application.Results.ToDo
+namespace YouDo.Core.Validations.ToDo
 {
     public static class ToDoErrors
     {
