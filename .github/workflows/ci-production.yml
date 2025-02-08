@@ -5,7 +5,7 @@ name: CI Production
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "main" ]
 
 jobs:
   build:
