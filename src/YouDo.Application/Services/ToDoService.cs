@@ -73,9 +73,9 @@ namespace YouDo.Application.Services
         public async Task<Result<ToDoDTO>> CreateAsync(CreateToDoDTO createToDoDTO)
         {
             //Validate data
-            var validationResult = ValidateCreation(createToDoDTO);
+            var result = ValidateCreate(createToDoDTO);
 
-            if (!validationResult.IsSuccess) return validationResult;
+            if (!result.IsSuccess) return result;
 
             var toDo = createToDoDTO.ToEntity();
             toDo.Id = Guid.NewGuid();
@@ -83,15 +83,17 @@ namespace YouDo.Application.Services
             toDo.UpdatedAt = DateTime.UtcNow;
             toDo.Completed = false;
 
-            var result = GetOperationResult(toDo);
-
-            if (result.IsSuccess) await _repository.CreateAsync(toDo);
+            await _repository.CreateAsync(toDo);
 
             return result;
         }
 
         public async Task<Result<ToDoDTO>> UpdateAsync(UpdateToDoDTO updateToDoDTO)
         {
+            var result = ValidateUpdate(updateToDoDTO);
+
+            if (!result.IsSuccess) return result;
+
             var toDo = await _repository.GetByIdAsync(updateToDoDTO.Id);
 
             if (toDo == null) return Result<ToDoDTO>.Failure(ToDoErrors.InvalidId);
@@ -99,9 +101,7 @@ namespace YouDo.Application.Services
             toDo = updateToDoDTO.ToEntity(toDo);
             toDo.UpdatedAt = DateTime.UtcNow;
 
-            var result = GetOperationResult(toDo);
-
-            if (result.IsSuccess) await _repository.UpdateAsync(toDo);
+            await _repository.UpdateAsync(toDo);
 
             return result;
         }
@@ -118,7 +118,7 @@ namespace YouDo.Application.Services
 
         }
 
-        private Result<ToDoDTO> ValidateCreation(CreateToDoDTO createToDoDTO)
+        private Result<ToDoDTO> ValidateCreate(CreateToDoDTO createToDoDTO)
         {
             if (!_userManager.Users.AnyAsync(x => x.Id == createToDoDTO.UserId).Result)
             {
@@ -147,6 +147,37 @@ namespace YouDo.Application.Services
             }
 
             return Result<ToDoDTO>.Success(createToDoDTO.ToDto());
+        }
+
+        private Result<ToDoDTO> ValidateUpdate(UpdateToDoDTO updateToDoDTO)
+        {
+            if (!_userManager.Users.AnyAsync(x => x.Id == updateToDoDTO.UserId).Result)
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidUserId);
+            }
+
+            if (string.IsNullOrEmpty(updateToDoDTO.Title))
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitle);
+            }
+
+            if (updateToDoDTO.Title.Length < TITLE_MIN_LENGTH)
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitleLength);
+            }
+
+            if (updateToDoDTO.Title.Length > TITLE_MAX_LENGTH)
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitleMaxLength);
+            }
+
+            if (!string.IsNullOrEmpty(updateToDoDTO.Details) &&
+                updateToDoDTO.Details.Length > DETAILS_MAX_LENGTH)
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidDetailsMaxLength);
+            }
+
+            return Result<ToDoDTO>.Success(updateToDoDTO.ToDto());
         }
     }
 }
