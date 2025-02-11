@@ -72,6 +72,11 @@ namespace YouDo.Application.Services
 
         public async Task<Result<ToDoDTO>> CreateAsync(CreateToDoDTO createToDoDTO)
         {
+            //Validate data
+            var validationResult = ValidateCreation(createToDoDTO);
+
+            if (!validationResult.IsSuccess) return validationResult;
+
             var toDo = createToDoDTO.ToEntity();
             toDo.Id = Guid.NewGuid();
             toDo.CreatedAt = DateTime.UtcNow;
@@ -90,7 +95,7 @@ namespace YouDo.Application.Services
             var toDo = await _repository.GetByIdAsync(updateToDoDTO.Id);
 
             if (toDo == null) return Result<ToDoDTO>.Failure(ToDoErrors.InvalidId);
-            
+
             toDo = updateToDoDTO.ToEntity(toDo);
             toDo.UpdatedAt = DateTime.UtcNow;
 
@@ -113,35 +118,35 @@ namespace YouDo.Application.Services
 
         }
 
-        private Result<ToDoDTO> GetOperationResult(ToDo toDo)
+        private Result<ToDoDTO> ValidateCreation(CreateToDoDTO createToDoDTO)
         {
-            if (!_userManager.Users.AnyAsync(x => x.Id == toDo.UserId).Result)
+            if (!_userManager.Users.AnyAsync(x => x.Id == createToDoDTO.UserId).Result)
             {
                 return Result<ToDoDTO>.Failure(ToDoErrors.InvalidUserId);
             }
 
-            if (string.IsNullOrEmpty(toDo.Title))
+            if (string.IsNullOrEmpty(createToDoDTO.Title))
             {
                 return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitle);
             }
 
-            if (toDo.Title.Length < TITLE_MIN_LENGTH)
+            if (createToDoDTO.Title.Length < TITLE_MIN_LENGTH)
             {
                 return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitleLength);
             }
 
-            if (toDo.Title.Length > TITLE_MAX_LENGTH)
+            if (createToDoDTO.Title.Length > TITLE_MAX_LENGTH)
             {
                 return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitleMaxLength);
             }
 
-            if (!string.IsNullOrEmpty(toDo.Details) &&
-                toDo.Details.Length > DETAILS_MAX_LENGTH)
+            if (!string.IsNullOrEmpty(createToDoDTO.Details) &&
+                createToDoDTO.Details.Length > DETAILS_MAX_LENGTH)
             {
                 return Result<ToDoDTO>.Failure(ToDoErrors.InvalidDetailsMaxLength);
             }
 
-            return Result<ToDoDTO>.Success(toDo.ToDto());
+            return Result<ToDoDTO>.Success(createToDoDTO.ToDto());
         }
     }
 }

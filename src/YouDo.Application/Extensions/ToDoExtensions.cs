@@ -59,6 +59,16 @@ namespace YouDo.Application.Extensions
             return new ToDo(createToDoDTO.Title, createToDoDTO.Details, createToDoDTO.UserId);
         }
 
+        public static ToDoDTO ToDto(this CreateToDoDTO createToDoDTO)
+        {
+            return new ToDoDTO
+            {
+                Title = createToDoDTO.Title,
+                Details = createToDoDTO.Details,
+                UserId = createToDoDTO.UserId
+            };
+        }
+
         public static ToDo ToEntity(this UpdateToDoDTO updateToDoDTO, ToDo toDo)
         {
             var todo = new ToDo(updateToDoDTO.Title, updateToDoDTO.Details, updateToDoDTO.UserId);
