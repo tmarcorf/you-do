@@ -32,7 +32,7 @@ namespace YouDo.Core.Tests
 
             act.Should()
                 .Throw<ArgumentException>()
-                .WithMessage(ToDoErrors.InvalidTitle.Description);
+                .WithMessage(ToDoErrors.InvalidTitle.Message);
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace YouDo.Core.Tests
 
             act.Should()
                 .Throw<ArgumentException>()
-                .WithMessage(ToDoErrors.InvalidTitleLength.Description);
+                .WithMessage(ToDoErrors.InvalidTitleLength.Message);
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace YouDo.Core.Tests
 
             act.Should()
                 .Throw<ArgumentException>()
-                .WithMessage(ToDoErrors.InvalidTitleMaxLength.Description);
+                .WithMessage(ToDoErrors.InvalidTitleMaxLength.Message);
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace YouDo.Core.Tests
 
             act.Should()
                 .Throw<ArgumentException>()
-                .WithMessage(ToDoErrors.InvalidDetailsMaxLength.Description);
+                .WithMessage(ToDoErrors.InvalidDetailsMaxLength.Message);
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace YouDo.Core.Tests
 
             action.Should()
                 .Throw<ArgumentException>()
-                .WithMessage(ToDoErrors.InvalidUserId.Description);
+                .WithMessage(ToDoErrors.InvalidUserId.Message);
         }
     }
 }

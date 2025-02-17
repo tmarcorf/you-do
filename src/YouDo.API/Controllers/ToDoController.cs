@@ -16,7 +16,6 @@ namespace YouDo.API.Controllers
         private const int LIMIT_TAKE = 30;
         private readonly IToDoService _service;
 
-
         public ToDoController(IToDoService service)
         {
             _service = service;
@@ -27,6 +26,8 @@ namespace YouDo.API.Controllers
         {
             Guid userIdGuid;
             if (!Guid.TryParse(userId, out userIdGuid)) return NotFound("ToDos not found");
+
+            var user = HttpContext.User;
 
             if (take > LIMIT_TAKE) return BadRequest($"The limit of items per page is {LIMIT_TAKE}");
 

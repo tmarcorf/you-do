@@ -73,7 +73,7 @@ namespace YouDo.Application.Services
         public async Task<Result<ToDoDTO>> CreateAsync(CreateToDoDTO createToDoDTO)
         {
             //Validate data
-            var result = ValidateCreate(createToDoDTO);
+            var result = Validate(createToDoDTO);
 
             if (!result.IsSuccess) return result;
 
@@ -90,7 +90,7 @@ namespace YouDo.Application.Services
 
         public async Task<Result<ToDoDTO>> UpdateAsync(UpdateToDoDTO updateToDoDTO)
         {
-            var result = ValidateUpdate(updateToDoDTO);
+            var result = Validate(updateToDoDTO);
 
             if (!result.IsSuccess) return result;
 
@@ -118,66 +118,35 @@ namespace YouDo.Application.Services
 
         }
 
-        private Result<ToDoDTO> ValidateCreate(CreateToDoDTO createToDoDTO)
+        private Result<ToDoDTO> Validate(CreateToDoDTO toDoDTO)
         {
-            if (!_userManager.Users.AnyAsync(x => x.Id == createToDoDTO.UserId).Result)
+            if (!_userManager.Users.AnyAsync(x => x.Id == toDoDTO.UserId).Result)
             {
                 return Result<ToDoDTO>.Failure(ToDoErrors.InvalidUserId);
             }
 
-            if (string.IsNullOrEmpty(createToDoDTO.Title))
+            if (string.IsNullOrEmpty(toDoDTO.Title))
             {
                 return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitle);
             }
 
-            if (createToDoDTO.Title.Length < TITLE_MIN_LENGTH)
+            if (toDoDTO.Title.Length < TITLE_MIN_LENGTH)
             {
                 return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitleLength);
             }
 
-            if (createToDoDTO.Title.Length > TITLE_MAX_LENGTH)
+            if (toDoDTO.Title.Length > TITLE_MAX_LENGTH)
             {
                 return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitleMaxLength);
             }
 
-            if (!string.IsNullOrEmpty(createToDoDTO.Details) &&
-                createToDoDTO.Details.Length > DETAILS_MAX_LENGTH)
+            if (!string.IsNullOrEmpty(toDoDTO.Details) &&
+                toDoDTO.Details.Length > DETAILS_MAX_LENGTH)
             {
                 return Result<ToDoDTO>.Failure(ToDoErrors.InvalidDetailsMaxLength);
             }
 
-            return Result<ToDoDTO>.Success(createToDoDTO.ToDto());
-        }
-
-        private Result<ToDoDTO> ValidateUpdate(UpdateToDoDTO updateToDoDTO)
-        {
-            if (!_userManager.Users.AnyAsync(x => x.Id == updateToDoDTO.UserId).Result)
-            {
-                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidUserId);
-            }
-
-            if (string.IsNullOrEmpty(updateToDoDTO.Title))
-            {
-                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitle);
-            }
-
-            if (updateToDoDTO.Title.Length < TITLE_MIN_LENGTH)
-            {
-                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitleLength);
-            }
-
-            if (updateToDoDTO.Title.Length > TITLE_MAX_LENGTH)
-            {
-                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidTitleMaxLength);
-            }
-
-            if (!string.IsNullOrEmpty(updateToDoDTO.Details) &&
-                updateToDoDTO.Details.Length > DETAILS_MAX_LENGTH)
-            {
-                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidDetailsMaxLength);
-            }
-
-            return Result<ToDoDTO>.Success(updateToDoDTO.ToDto());
+            return Result<ToDoDTO>.Success(toDoDTO.ToDto());
         }
     }
 }

@@ -36,7 +36,7 @@ namespace YouDo.API.Controllers
 
             var result = await _authenticateService.Authenticate(loginModel.Email, loginModel.Password);
 
-            if (!result.IsSuccess) return NotFound(result.Error.Description);
+            if (!result.IsSuccess) return NotFound(result.Error.Message);
 
             return Ok(result.Data);
         }

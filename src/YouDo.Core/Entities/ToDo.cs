@@ -34,19 +34,19 @@ namespace YouDo.Core.Entities
         private void Validate()
         {
             if (string.IsNullOrWhiteSpace(Title))
-                throw new ArgumentException(ToDoErrors.InvalidTitle.Description);
+                throw new ArgumentException(ToDoErrors.InvalidTitle.Message);
 
             if (Title.Length < TITLE_MIN_LENGTH)
-                throw new ArgumentException(ToDoErrors.InvalidTitleLength.Description);
+                throw new ArgumentException(ToDoErrors.InvalidTitleLength.Message);
 
             if (Title.Length > TITLE_MAX_LENGTH)
-                throw new ArgumentException(ToDoErrors.InvalidTitleMaxLength.Description);
+                throw new ArgumentException(ToDoErrors.InvalidTitleMaxLength.Message);
 
             if (Details?.Length > 500)
-                throw new ArgumentException(ToDoErrors.InvalidDetailsMaxLength.Description);
+                throw new ArgumentException(ToDoErrors.InvalidDetailsMaxLength.Message);
 
             if (UserId == Guid.Empty)
-                throw new ArgumentException(ToDoErrors.InvalidUserId.Description);
+                throw new ArgumentException(ToDoErrors.InvalidUserId.Message);
         }
     }
 }

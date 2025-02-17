@@ -42,7 +42,7 @@ namespace YouDo.Core.Tests
 
             func.Should()
                 .Throw<ArgumentException>()
-                .WithMessage(UserErrors.InvalidEmail.Description);
+                .WithMessage(UserErrors.InvalidEmail.Message);
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace YouDo.Core.Tests
 
             func.Should()
                 .Throw<ArgumentException>()
-                .WithMessage(UserErrors.InvalidFirstName.Description);
+                .WithMessage(UserErrors.InvalidFirstName.Message);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace YouDo.Core.Tests
 
             func.Should()
                 .Throw<ArgumentException>()
-                .WithMessage(UserErrors.InvalidLastName.Description);
+                .WithMessage(UserErrors.InvalidLastName.Message);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace YouDo.Core.Tests
 
             func.Should()
                 .Throw<ArgumentException>()
-                .WithMessage(UserErrors.InvalidDateOfBirth.Description);
+                .WithMessage(UserErrors.InvalidDateOfBirth.Message);
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace YouDo.Core.Tests
 
             func.Should()
                 .Throw<ArgumentException>()
-                .WithMessage(UserErrors.DateOfBirthGreaterThanCurrentDate.Description);
+                .WithMessage(UserErrors.DateOfBirthGreaterThanCurrentDate.Message);
         }
 
         [Theory]
@@ -94,7 +94,7 @@ namespace YouDo.Core.Tests
             var func = () => new User("test@example.com", "John", "Doe", DateTime.UtcNow.AddYears(-25), (EnumGender)invalidGender);
 
             func.Should().Throw<ArgumentException>()
-                .WithMessage(UserErrors.InvalidGender.Description);
+                .WithMessage(UserErrors.InvalidGender.Message);
         }
     }
 }
