@@ -1,8 +1,8 @@
 ﻿using YouDo.Core.Enums;
 
-namespace YouDo.API.Models.Authenticate
+namespace YouDo.Application.DTOs.Authenticate
 {
-    public class CreateUserModel
+    public class CreateUserDTO
     {
         public string Email { get; set; }
 

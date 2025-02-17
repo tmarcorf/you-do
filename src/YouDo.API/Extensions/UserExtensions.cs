@@ -1,11 +1,11 @@
-﻿using YouDo.API.Models.Authenticate;
+﻿using YouDo.Application.DTOs.Authenticate;
 using YouDo.Core.Entities;
 
 namespace YouDo.API.Extensions
 {
     public static class UserExtensions
     {
-        public static User ToEntity(this CreateUserModel createUserModel)
+        public static User ToEntity(this CreateUserDTO createUserModel)
         {
             return new User(
                 createUserModel.Email,

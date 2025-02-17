@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using YouDo.Application.DTOs.ToDo;
 using YouDo.Application.Interfaces;
-using YouDo.Application.Results;
 
 namespace YouDo.API.Controllers
 {

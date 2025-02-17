@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YouDo.API.Extensions;
-using YouDo.API.Models.Authenticate;
-using YouDo.Application.DTOs;
 using YouDo.Application.Interfaces;
+using YouDo.Application.DTOs.Authenticate;
 
 namespace YouDo.API.Controllers
 {
@@ -18,19 +17,19 @@ namespace YouDo.API.Controllers
         }
 
         [HttpPost("create-user")]
-        public async Task<ActionResult> CreateUser([FromBody] CreateUserModel createUserModel)
+        public async Task<ActionResult> CreateUser([FromBody] CreateUserDTO createUserDTO)
         {
-            if (createUserModel == null) return BadRequest("Invalid data");
+            if (createUserDTO == null) return BadRequest("Invalid data");
 
-            var createResult = await _authenticateService.RegisterUser(createUserModel.ToEntity(), createUserModel.Password);
+            var createResult = await _authenticateService.RegisterUser(createUserDTO, createUserDTO.Password);
 
             if (!createResult.IsSuccess) return BadRequest(createResult);
 
-            return Ok($"User {createUserModel.Email} was successfully created");
+            return Ok($"User {createUserDTO.Email} was successfully created");
         }
 
         [HttpPost("login-user")]
-        public async Task<ActionResult> Login(LoginModel loginModel)
+        public async Task<ActionResult> Login(LoginUserDTO loginModel)
         {
             if (loginModel == null) return BadRequest("Invalid data");
 

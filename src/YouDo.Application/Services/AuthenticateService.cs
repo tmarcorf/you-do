@@ -1,14 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
-using YouDo.Application.DTOs;
+using System.Text.RegularExpressions;
+using YouDo.Application.DTOs.Authenticate;
+using YouDo.Application.DTOs.ToDo;
+using YouDo.Application.Extensions;
 using YouDo.Application.Interfaces;
 using YouDo.Application.Results;
 using YouDo.Application.Results.Authenticate;
 using YouDo.Core.Entities;
+using YouDo.Core.Enums;
+using YouDo.Core.Validations.ToDo;
+using YouDo.Core.Validations.User;
 
 namespace YouDo.Application.Services
 {
@@ -37,9 +45,13 @@ namespace YouDo.Application.Services
             return GenerateToken(email);
         }
 
-        public async Task<Result<IdentityResult>> RegisterUser(User user, string password)
+        public async Task<Result<IdentityResult>> RegisterUser(CreateUserDTO createUserDTO, string password)
         {
-            var createResult = await _userManager.CreateAsync(user, password);
+            var result = Validate(createUserDTO);
+
+            if (!result.IsSuccess) return result;
+
+            var createResult = await _userManager.CreateAsync(createUserDTO.ToEntity(), password);
 
             if (!createResult.Succeeded)
             {
@@ -87,6 +99,43 @@ namespace YouDo.Application.Services
             };
 
             return Result<UserTokenDTO>.Success(userTokenDto);
+        }
+
+        private Result<IdentityResult> Validate(CreateUserDTO createUserDTO)
+        {
+            string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+
+            if (!Regex.IsMatch(createUserDTO.Email, emailPattern))
+            {
+                return Result<IdentityResult>.Failure(UserErrors.InvalidEmail);
+            }
+
+            if (string.IsNullOrWhiteSpace(createUserDTO.FirstName))
+            {
+                return Result<IdentityResult>.Failure(UserErrors.InvalidFirstName);
+            }
+
+            if (string.IsNullOrWhiteSpace(createUserDTO.LastName))
+            {
+                return Result<IdentityResult>.Failure(UserErrors.InvalidLastName);
+            }
+
+            if (createUserDTO.DateOfBirth <= DateTime.MinValue)
+            {
+                return Result<IdentityResult>.Failure(UserErrors.InvalidDateOfBirth);
+            }
+
+            if (createUserDTO.DateOfBirth > DateTime.UtcNow)
+            {
+                return Result<IdentityResult>.Failure(UserErrors.DateOfBirthGreaterThanCurrentDate);
+            }
+
+            if (!Enum.IsDefined(typeof(EnumGender), createUserDTO.Gender))
+            {
+                return Result<IdentityResult>.Failure(UserErrors.InvalidGender);
+            }
+
+            return Result<IdentityResult>.Success(null);
         }
     }
 }

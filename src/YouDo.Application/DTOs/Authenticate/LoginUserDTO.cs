@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace YouDo.API.Models.Authenticate
+namespace YouDo.Application.DTOs.Authenticate
 {
-    public class LoginModel
+    public class LoginUserDTO
     {
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid format email")]
