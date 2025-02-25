@@ -76,19 +76,5 @@ namespace YouDo.Core.Tests
                 .Throw<ArgumentException>()
                 .WithMessage(ToDoErrors.InvalidDetailsMaxLength.Message);
         }
-
-        [Fact]
-        public void Constructor_ShouldThrowException_WhenUserIdIsEmpty()
-        {
-            var title = "Valid Title";
-            var details = "Valid details";
-            var userId = Guid.Empty;
-
-            var action = () => new ToDo(title, details, userId);
-
-            action.Should()
-                .Throw<ArgumentException>()
-                .WithMessage(ToDoErrors.InvalidUserId.Message);
-        }
     }
 }

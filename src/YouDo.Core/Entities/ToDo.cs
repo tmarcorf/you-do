@@ -44,9 +44,6 @@ namespace YouDo.Core.Entities
 
             if (Details?.Length > 500)
                 throw new ArgumentException(ToDoErrors.InvalidDetailsMaxLength.Message);
-
-            if (UserId == Guid.Empty)
-                throw new ArgumentException(ToDoErrors.InvalidUserId.Message);
         }
     }
 }

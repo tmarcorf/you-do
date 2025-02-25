@@ -85,7 +85,7 @@ namespace YouDo.Application.Services
 
             await _repository.CreateAsync(toDo);
 
-            return result;
+            return Result<ToDoDTO>.Success(toDo.ToDto());
         }
 
         public async Task<Result<ToDoDTO>> UpdateAsync(UpdateToDoDTO updateToDoDTO)
@@ -103,7 +103,7 @@ namespace YouDo.Application.Services
 
             await _repository.UpdateAsync(toDo);
 
-            return result;
+            return Result<ToDoDTO>.Success(toDo.ToDto());
         }
 
         public async Task<Result<bool>> DeleteAsync(Guid id)
@@ -120,7 +120,7 @@ namespace YouDo.Application.Services
 
         private Result<ToDoDTO> Validate(CreateToDoDTO toDoDTO)
         {
-            if (!_userManager.Users.AnyAsync(x => x.Id == toDoDTO.UserId).Result)
+            if (_userManager.FindByIdAsync(toDoDTO.UserId.ToString()).Result == null)
             {
                 return Result<ToDoDTO>.Failure(ToDoErrors.InvalidUserId);
             }
