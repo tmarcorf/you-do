@@ -12,9 +12,9 @@ using YouDo.Application.DTOs.ToDo;
 using YouDo.Application.Extensions;
 using YouDo.Application.Interfaces;
 using YouDo.Application.Results;
-using YouDo.Application.Results.Authenticate;
 using YouDo.Core.Entities;
 using YouDo.Core.Enums;
+using YouDo.Core.Validations.Authenticate;
 using YouDo.Core.Validations.ToDo;
 using YouDo.Core.Validations.User;
 
