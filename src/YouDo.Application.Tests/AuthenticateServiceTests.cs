@@ -38,13 +38,7 @@ namespace YouDo.Application.Tests
 
             // Criando uma instância real do SignInManager com os mocks
             _mockSignInManager = new Mock<SignInManager<User>>(
-                _mockUserManager.Object,
-                contextAccessorMock.Object,
-                userPrincipalFactoryMock.Object,
-                identityOptionsMock.Object,
-                loggerMock.Object,
-                schemeProviderMock.Object,
-                userConfirmationMock.Object
+                _mockUserManager.Object
             );
 
             // Mock do IConfiguration
