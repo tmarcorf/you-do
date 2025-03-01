@@ -12,6 +12,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env: 
+      SECRETKEYTEST: ${{ secrets.SECRETKEYTEST }}
+
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
