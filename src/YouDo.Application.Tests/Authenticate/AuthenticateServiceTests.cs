@@ -12,42 +12,36 @@ using YouDo.Core.Enums;
 using YouDo.Core.Validations.Authenticate;
 using YouDo.Core.Validations.User;
 
-namespace YouDo.Application.Tests
+namespace YouDo.Application.Tests.Authenticate
 {
     public class AuthenticateServiceTests
     {
         private readonly Mock<UserManager<User>> _mockUserManager;
-        private readonly Mock<SignInManager<User>> _mockSignInManager;
+        private readonly FakeSignInManager _fakeSignInManager;
         private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly AuthenticateService _authenticateService;
 
         public AuthenticateServiceTests()
         {
-            // Mock do UserManager
             var userStoreMock = new Mock<IUserStore<User>>();
             _mockUserManager = new Mock<UserManager<User>>(
-                userStoreMock.Object, null, null, null, null, null, null, null, null);
-
-            // Mock das dependências do SignInManager
-            var contextAccessorMock = new Mock<IHttpContextAccessor>();
-            var userPrincipalFactoryMock = new Mock<IUserClaimsPrincipalFactory<User>>();
-            var identityOptionsMock = new Mock<IOptions<IdentityOptions>>();
-            var loggerMock = new Mock<ILogger<SignInManager<User>>>();
-            var schemeProviderMock = new Mock<IAuthenticationSchemeProvider>();
-            var userConfirmationMock = new Mock<IUserConfirmation<User>>();
-
-            // Criando uma instância real do SignInManager com os mocks
-            _mockSignInManager = new Mock<SignInManager<User>>(
-                _mockUserManager.Object
+                userStoreMock.Object,
+                new Mock<IOptions<IdentityOptions>>().Object,
+                new Mock<IPasswordHasher<User>>().Object,
+                new IUserValidator<User>[0],
+                new IPasswordValidator<User>[0],
+                new Mock<ILookupNormalizer>().Object,
+                new Mock<IdentityErrorDescriber>().Object,
+                new Mock<IServiceProvider>().Object,
+                new Mock<ILogger<UserManager<User>>>().Object
             );
 
-            // Mock do IConfiguration
+            _fakeSignInManager = new FakeSignInManager(_mockUserManager.Object);
             _mockConfiguration = new Mock<IConfiguration>();
 
-            // Instância do serviço
             _authenticateService = new AuthenticateService(
                 _mockUserManager.Object,
-                _mockSignInManager.Object,
+                _fakeSignInManager,
                 _mockConfiguration.Object
             );
         }
@@ -59,9 +53,7 @@ namespace YouDo.Application.Tests
             var email = "test@example.com";
             var password = "wrongpassword";
 
-            _mockSignInManager
-                .Setup(sm => sm.PasswordSignInAsync(email, password, false, false))
-                .ReturnsAsync(SignInResult.Failed);
+            _fakeSignInManager.SetPasswordSignInResult(SignInResult.Failed);
 
             // Act
             var result = await _authenticateService.Authenticate(email, password);
@@ -78,19 +70,11 @@ namespace YouDo.Application.Tests
             var email = "test@example.com";
             var password = "correctpassword";
 
-            _mockSignInManager
-                .Setup(sm => sm.PasswordSignInAsync(email, password, false, false))
-                .ReturnsAsync(SignInResult.Success);
+            _fakeSignInManager.SetPasswordSignInResult(SignInResult.Success);
 
-            _mockConfiguration
-                .Setup(c => c["Jwt:SecretKey"])
-                .Returns("SuperSecretKey1234567890");
-            _mockConfiguration
-                .Setup(c => c["Jwt:Issuer"])
-                .Returns("TestIssuer");
-            _mockConfiguration
-                .Setup(c => c["Jwt:Audience"])
-                .Returns("TestAudience");
+            _mockConfiguration.Setup(c => c["Jwt:SecretKey"]).Returns("SecretKeyTest");
+            _mockConfiguration.Setup(c => c["Jwt:Issuer"]).Returns("TestIssuer");
+            _mockConfiguration.Setup(c => c["Jwt:Audience"]).Returns("TestAudience");
 
             // Act
             var result = await _authenticateService.Authenticate(email, password);
@@ -184,41 +168,11 @@ namespace YouDo.Application.Tests
         [Fact]
         public async Task Logout_CallsSignOutAsync()
         {
-            // Arrange
-            _mockSignInManager
-                .Setup(sm => sm.SignOutAsync())
-                .Returns(Task.CompletedTask);
-
             // Act
             await _authenticateService.Logout();
 
             // Assert
-            _mockSignInManager.Verify(sm => sm.SignOutAsync(), Times.Once);
+            Assert.True(_fakeSignInManager.SignOutCalled);
         }
-
-        //[Fact]
-        //public void GenerateToken_ValidEmail_ReturnsToken()
-        //{
-        //    // Arrange
-        //    var email = "test@example.com";
-
-        //    _mockConfiguration
-        //        .Setup(c => c["Jwt:SecretKey"])
-        //        .Returns("SuperSecretKey1234567890");
-        //    _mockConfiguration
-        //        .Setup(c => c["Jwt:Issuer"])
-        //        .Returns("TestIssuer");
-        //    _mockConfiguration
-        //        .Setup(c => c["Jwt:Audience"])
-        //        .Returns("TestAudience");
-
-        //    // Act
-        //    var result = _authenticateService.GenerateToken(email);
-
-        //    // Assert
-        //    Assert.True(result.IsSuccess);
-        //    Assert.NotNull(result.Data.Token);
-        //    Assert.True(result.Data.Expiration > DateTime.Now);
-        //}
     }
 }
