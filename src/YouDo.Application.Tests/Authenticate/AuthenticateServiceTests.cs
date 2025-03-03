@@ -72,7 +72,7 @@ namespace YouDo.Application.Tests.Authenticate
 
             _fakeSignInManager.SetPasswordSignInResult(SignInResult.Success);
 
-            _mockConfiguration.Setup(c => c["Jwt:SecretKey"]).Returns("SecretKeyTest");
+            _mockConfiguration.Setup(c => c["Jwt:SecretKey"]).Returns("SECRETKEYTEST");
             _mockConfiguration.Setup(c => c["Jwt:Issuer"]).Returns("TestIssuer");
             _mockConfiguration.Setup(c => c["Jwt:Audience"]).Returns("TestAudience");
 
