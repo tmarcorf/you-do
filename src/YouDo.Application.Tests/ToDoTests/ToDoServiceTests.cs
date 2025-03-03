@@ -7,7 +7,7 @@ using YouDo.Core.Enums;
 using YouDo.Core.Interfaces;
 using YouDo.Core.Validations.ToDo;
 
-namespace YouDo.Application.Tests.ToDo
+namespace YouDo.Application.Tests.ToDoTests
 {
     public class ToDoServiceTests
     {

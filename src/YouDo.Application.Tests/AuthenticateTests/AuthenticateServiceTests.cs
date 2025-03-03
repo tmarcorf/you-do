@@ -12,7 +12,7 @@ using YouDo.Core.Enums;
 using YouDo.Core.Validations.Authenticate;
 using YouDo.Core.Validations.User;
 
-namespace YouDo.Application.Tests.Authenticate
+namespace YouDo.Application.Tests.AuthenticateTests
 {
     public class AuthenticateServiceTests
     {

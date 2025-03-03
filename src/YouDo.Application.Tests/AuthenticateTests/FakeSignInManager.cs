@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using YouDo.Core.Entities;
 
-namespace YouDo.Application.Tests.Authenticate
+namespace YouDo.Application.Tests.AuthenticateTests
 {
     public class FakeSignInManager : SignInManager<User>
     {
