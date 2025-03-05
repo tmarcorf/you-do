@@ -57,5 +57,5 @@ If you want to remove the Docker volumes (including the database data), you can 
 docker-compose down -v
 ```
 
-📄 License
+### 📄 License
 This project is licensed under the MIT License - see the LICENSE section for details.
