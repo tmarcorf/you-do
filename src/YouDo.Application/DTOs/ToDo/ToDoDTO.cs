@@ -16,7 +16,5 @@ namespace YouDo.Application.DTOs.ToDo
         public DateTime UpdatedAt { get; set; }
 
         public bool Completed { get; set; }
-
-        public Guid UserId { get; set; }
     }
 }

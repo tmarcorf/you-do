@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using YouDo.Application.DTOs.ToDo;
 using YouDo.Application.Interfaces;
 
@@ -20,16 +21,12 @@ namespace YouDo.API.Controllers
             _service = service;
         }
 
-        [HttpGet("{userId}/{skip}/{take}")]
-        public async Task<ActionResult> GetAllFromUser(string userId, int skip = DEFAULT_SKIP, int take = DEFAULT_TAKE)
+        [HttpGet("{skip}/{take}")]
+        public async Task<ActionResult> GetAllFromUser(int skip = DEFAULT_SKIP, int take = DEFAULT_TAKE)
         {
-            Guid userIdGuid;
-            if (!Guid.TryParse(userId, out userIdGuid)) return NotFound("ToDos not found");
-
-            var user = HttpContext.User;
-
             if (take > LIMIT_TAKE) return BadRequest($"The limit of items per page is {LIMIT_TAKE}");
 
+            var userIdGuid = GetUserId();
             var result = await _service.GetAllFromUserAsync(userIdGuid, skip, take);
 
             if (!result.IsSuccess) return BadRequest(result.Error);
@@ -82,6 +79,12 @@ namespace YouDo.API.Controllers
         {
             if (updateTodoModel == null) return BadRequest("Invalid data");
 
+            var authenticatedUserId = GetUserId();
+            if (updateTodoModel.UserId != authenticatedUserId)
+            {
+                return Unauthorized("You are not authorized to update this resource.");
+            }
+
             var result = await _service.UpdateAsync(updateTodoModel);
 
             if (!result.IsSuccess) return BadRequest(result.Error);
@@ -100,6 +103,19 @@ namespace YouDo.API.Controllers
             if (!result.IsSuccess) return BadRequest(result.Error);
 
             return Ok(result);
+        }
+
+        private Guid GetUserId()
+        {
+            Guid userId;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out userId))
+            {
+                throw new UnauthorizedAccessException("Not authorized user.");
+            }
+
+            return userId;
         }
     }
 }

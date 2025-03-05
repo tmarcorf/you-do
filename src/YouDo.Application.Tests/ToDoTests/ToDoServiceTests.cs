@@ -41,7 +41,7 @@ namespace YouDo.Application.Tests.ToDoTests
             var userId = Guid.NewGuid();
             var skip = 0;
             var take = 10;
-            var toDoEntities = new List<ToDo> { new ToDo("Title", "Details", userId) };
+            var toDoEntities = new List<ToDo> { new ToDo("Title", "Details") };
 
             _mockRepository.Setup(repo => repo.GetAllFromUserAsync(userId, skip, take)).ReturnsAsync(toDoEntities);
 
@@ -86,7 +86,7 @@ namespace YouDo.Application.Tests.ToDoTests
             var creationDate = DateTime.UtcNow;
             var skip = 0;
             var take = 10;
-            var toDoEntities = new List<ToDo> { new ToDo("Title", "Details", userId) { CreatedAt = creationDate } };
+            var toDoEntities = new List<ToDo> { new ToDo("Title", "Details") { CreatedAt = creationDate } };
 
             _mockRepository.Setup(repo => repo.GetAllFromUserWithSpecifiedCreationDateAsync(userId, creationDate, skip, take)).ReturnsAsync(toDoEntities);
 
@@ -110,7 +110,7 @@ namespace YouDo.Application.Tests.ToDoTests
         public async Task GetByIdAsync_ValidId_ReturnsToDo()
         {
             var id = Guid.NewGuid();
-            var toDoEntity = new ToDo("Title", "Details", Guid.NewGuid()) { Id = id };
+            var toDoEntity = new ToDo("Title", "Details") { Id = id };
 
             _mockRepository.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync(toDoEntity);
 
@@ -140,7 +140,7 @@ namespace YouDo.Application.Tests.ToDoTests
         {
             var createToDoDTO = new CreateToDoDTO { UserId = Guid.NewGuid(), Title = "Test123" };
 
-            var toDo = new ToDo(createToDoDTO.Title, createToDoDTO.Details, createToDoDTO.UserId);
+            var toDo = new ToDo(createToDoDTO.Title, createToDoDTO.Details);
 
             var user = new User(
                 email: "test@example.com",
@@ -194,7 +194,7 @@ namespace YouDo.Application.Tests.ToDoTests
         public async Task UpdateAsync_ValidInput_ReturnsSuccess()
         {
             var updateToDoDTO = new UpdateToDoDTO { Id = Guid.NewGuid(), UserId = Guid.NewGuid(), Title = "Test123" };
-            var toDoEntity = new ToDo("Old Title", "Details", Guid.NewGuid()) { Id = updateToDoDTO.Id };
+            var toDoEntity = new ToDo("Old Title", "Details") { Id = updateToDoDTO.Id };
 
             var user = new User(
                 email: "test@example.com",
@@ -238,7 +238,7 @@ namespace YouDo.Application.Tests.ToDoTests
         public async Task DeleteAsync_ValidId_ReturnsSuccess()
         {
             var id = Guid.NewGuid();
-            var toDoEntity = new ToDo("Title", "Details", Guid.NewGuid()) { Id = id };
+            var toDoEntity = new ToDo("Title", "Details") { Id = id };
 
             _mockRepository.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync(toDoEntity);
             _mockRepository.Setup(repo => repo.DeleteAsync(toDoEntity)).ReturnsAsync(true);

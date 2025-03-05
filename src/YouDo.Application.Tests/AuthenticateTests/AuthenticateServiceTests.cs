@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using YouDo.Application.DTOs.Authenticate;
+using YouDo.Application.Extensions;
 using YouDo.Application.Services;
 using YouDo.Core.Entities;
 using YouDo.Core.Enums;
@@ -70,11 +71,20 @@ namespace YouDo.Application.Tests.AuthenticateTests
             var email = "test@example.com";
             var password = "correctpassword";
 
+            var user = new User(
+                "test@example.com", 
+                "John", 
+                "Doe", 
+                new DateTime(1990, 1, 1), 
+                EnumGender.MALE);
+
             _fakeSignInManager.SetPasswordSignInResult(SignInResult.Success);
 
             _mockConfiguration.Setup(c => c["Jwt:SecretKey"]).Returns("SECRETKEYTEST");
             _mockConfiguration.Setup(c => c["Jwt:Issuer"]).Returns("TestIssuer");
             _mockConfiguration.Setup(c => c["Jwt:Audience"]).Returns("TestAudience");
+
+            _mockUserManager.Setup(u => u.FindByEmailAsync(email)).ReturnsAsync(user);
 
             // Act
             var result = await _authenticateService.Authenticate(email, password);

@@ -42,7 +42,9 @@ namespace YouDo.Application.Services
                 return Result<UserTokenDTO>.Failure(AuthenticateErrors.InvalidEmailOrPassword);
             }
 
-            return GenerateToken(email);
+            var user = await _userManager.FindByEmailAsync(email);
+
+            return GenerateToken(user);
         }
 
         public async Task<Result<IdentityResult>> RegisterUser(CreateUserDTO createUserDTO, string password)
@@ -71,11 +73,12 @@ namespace YouDo.Application.Services
             await _signInManager.SignOutAsync();
         }
 
-        private Result<UserTokenDTO> GenerateToken(string email)
+        private Result<UserTokenDTO> GenerateToken(User user)
         {
             var claims = new[]
             {
-                new Claim("email", email),
+                new Claim("sub", user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
             

@@ -13,7 +13,8 @@ namespace YouDo.Core.Tests
             var details = "This is a valid detail.";
             var userId = Guid.NewGuid();
 
-            var toDo = new ToDo(title, details, userId);
+            var toDo = new ToDo(title, details);
+            toDo.UserId = userId;
 
             toDo.Should().NotBeNull();
             toDo.Title.Should().Be(title);
@@ -28,7 +29,7 @@ namespace YouDo.Core.Tests
             var details = "Valid details";
             var userId = Guid.NewGuid();
 
-            var act = () => new ToDo(title, details, userId);
+            var act = () => new ToDo(title, details);
 
             act.Should()
                 .Throw<ArgumentException>()
@@ -42,7 +43,7 @@ namespace YouDo.Core.Tests
             var details = "Valid details";
             var userId = Guid.NewGuid();
 
-            var act = () => new ToDo(title, details, userId);
+            var act = () => new ToDo(title, details);
 
             act.Should()
                 .Throw<ArgumentException>()
@@ -56,7 +57,7 @@ namespace YouDo.Core.Tests
             var details = "Valid details";
             var userId = Guid.NewGuid();
 
-            var act = () => new ToDo(title, details, userId);
+            var act = () => new ToDo(title, details);
 
             act.Should()
                 .Throw<ArgumentException>()
@@ -70,7 +71,7 @@ namespace YouDo.Core.Tests
             var details = new string('b', 501);
             var userId = Guid.NewGuid();
 
-            var act = () => new ToDo(title, details, userId);
+            var act = () => new ToDo(title, details);
 
             act.Should()
                 .Throw<ArgumentException>()

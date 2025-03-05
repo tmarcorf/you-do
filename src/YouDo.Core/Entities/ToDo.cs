@@ -8,11 +8,10 @@ namespace YouDo.Core.Entities
         private const int TITLE_MAX_LENGTH = 100;
         private const int DESCRIPTION_MAX_VALUE = 500;
 
-        public ToDo(string title, string details, Guid userId)
+        public ToDo(string title, string details)
         {
             Title = title;
             Details = details;
-            UserId = userId;
 
             Validate();
         }
@@ -27,7 +26,7 @@ namespace YouDo.Core.Entities
 
         public bool Completed { get; set; }
 
-        public Guid UserId { get; private set; }
+        public Guid UserId { get; set; }
 
         public User User { get; set; }
 

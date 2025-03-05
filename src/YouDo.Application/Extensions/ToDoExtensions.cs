@@ -22,8 +22,7 @@ namespace YouDo.Application.Extensions
                 Details = toDo.Details,
                 CreatedAt = toDo.CreatedAt,
                 UpdatedAt = toDo.UpdatedAt,
-                Completed = toDo.Completed,
-                UserId = toDo.UserId,
+                Completed = toDo.Completed
             };
         }
 
@@ -31,7 +30,7 @@ namespace YouDo.Application.Extensions
         {
             if (toDoDTO is null) return null;
 
-            var toDo = new ToDo(toDoDTO.Title, toDoDTO.Details, toDoDTO.UserId);
+            var toDo = new ToDo(toDoDTO.Title, toDoDTO.Details);
             toDo.Id = toDoDTO.Id;
             toDo.CreatedAt = toDoDTO.CreatedAt;
             toDo.UpdatedAt = toDoDTO.UpdatedAt;
@@ -56,7 +55,7 @@ namespace YouDo.Application.Extensions
 
         public static ToDo ToEntity(this CreateToDoDTO createToDoDTO)
         {
-            return new ToDo(createToDoDTO.Title, createToDoDTO.Details, createToDoDTO.UserId);
+            return new ToDo(createToDoDTO.Title, createToDoDTO.Details);
         }
 
         public static ToDoDTO ToDto(this CreateToDoDTO createToDoDTO)
@@ -64,14 +63,13 @@ namespace YouDo.Application.Extensions
             return new ToDoDTO
             {
                 Title = createToDoDTO.Title,
-                Details = createToDoDTO.Details,
-                UserId = createToDoDTO.UserId
+                Details = createToDoDTO.Details
             };
         }
 
         public static ToDo ToEntity(this UpdateToDoDTO updateToDoDTO, ToDo toDo)
         {
-            var todo = new ToDo(updateToDoDTO.Title, updateToDoDTO.Details, updateToDoDTO.UserId);
+            var todo = new ToDo(updateToDoDTO.Title, updateToDoDTO.Details);
             toDo.Completed = updateToDoDTO.Completed;
 
             return toDo;

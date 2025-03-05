@@ -11,7 +11,7 @@
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:7065"
     },
-    "VS": {
+    "Chrome": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
