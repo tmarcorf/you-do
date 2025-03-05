@@ -17,7 +17,7 @@ namespace YouDo.Infraestructure.IoC
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            var connectionString = Environment.GetEnvironmentVariable(configuration["DefaultConnection"]);
+            var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseNpgsql(connectionString, 

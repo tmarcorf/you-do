@@ -51,7 +51,10 @@ namespace YouDo.Application.Services
 
             if (!result.IsSuccess) return result;
 
-            var createResult = await _userManager.CreateAsync(createUserDTO.ToEntity(), password);
+            var user = createUserDTO.ToEntity();
+            user.UserName = createUserDTO.Email;
+
+            var createResult = await _userManager.CreateAsync(user, password);
 
             if (!createResult.Succeeded)
             {

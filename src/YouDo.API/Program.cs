@@ -1,4 +1,6 @@
 
+using Microsoft.EntityFrameworkCore;
+using YouDo.Infraestructure.Data.Context;
 using YouDo.Infraestructure.IoC;
 
 namespace YouDo.API
@@ -20,6 +22,8 @@ namespace YouDo.API
 
             var app = builder.Build();
 
+            InitializeDatabase(app);
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -35,6 +39,25 @@ namespace YouDo.API
             app.MapControllers();
 
             app.Run();
+        }
+
+        private static void InitializeDatabase(WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<ApplicationDbContext>();
+
+                try
+                {
+                    context.Database.Migrate();
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "Ocorreu um erro ao aplicar as migrações.");
+                }
+            }
         }
     }
 }
