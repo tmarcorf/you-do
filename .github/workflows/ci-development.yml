@@ -35,5 +35,5 @@ jobs:
       run: |
         cd src
         dotnet test -t
-        dotnet test --no-build --verbosity detailed
+        dotnet test --no-build --verbosity normal
     
