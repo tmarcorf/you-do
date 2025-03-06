@@ -78,7 +78,7 @@ namespace YouDo.Application.Services
             var claims = new[]
             {
                 new Claim("sub", user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
+                new Claim("email", user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
             
