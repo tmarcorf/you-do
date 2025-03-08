@@ -2,7 +2,7 @@
 A simple To-Do app to help you manage and organize your daily tasks.
 
 ## Tech Stack
-- Front-end: Blazor 
+- Front-end: Angular 
 - Back-end: .NET
 - Database: PostgreSQL
 - Infra: Docker
