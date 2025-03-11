@@ -191,10 +191,47 @@ namespace YouDo.Application.Tests.ToDoTests
         }
 
         [Fact]
+        public async Task UpdateAsync_InvalidUserId_ReturnsFailure()
+        {
+            var userIdFromRequest = Guid.NewGuid();
+            var userIdFromDataBase = Guid.NewGuid();
+            var updateToDoDTO = new UpdateToDoDTO { Id = Guid.NewGuid(), UserId = userIdFromRequest, Title = "Test123" };
+            var toDoEntity = new ToDo("Old Title", "Details") { Id = updateToDoDTO.Id, UserId = userIdFromDataBase };
+
+            var user = new User(
+                email: "test@example.com",
+                firstName: "John",
+                lastName: "Doe",
+                dateOfBirth: new DateTime(1990, 1, 1),
+                gender: EnumGender.MALE
+            );
+
+            user.Id = userIdFromRequest;
+
+            _mockUserManager
+                .Setup(um => um.FindByIdAsync(updateToDoDTO.UserId.ToString()))
+                .ReturnsAsync(user);
+
+            _mockRepository
+                .Setup(repo => repo.GetByIdAsync(updateToDoDTO.Id))
+                .ReturnsAsync(toDoEntity);
+
+            _mockRepository
+                .Setup(repo => repo.UpdateAsync(It.IsAny<ToDo>()))
+                .ReturnsAsync(toDoEntity);
+
+            var result = await _toDoService.UpdateAsync(updateToDoDTO);
+
+            Assert.False(result.IsSuccess);
+            Assert.Equal(ToDoErrors.InvalidUserId, result.Error);
+        }
+
+        [Fact]
         public async Task UpdateAsync_ValidInput_ReturnsSuccess()
         {
-            var updateToDoDTO = new UpdateToDoDTO { Id = Guid.NewGuid(), UserId = Guid.NewGuid(), Title = "Test123" };
-            var toDoEntity = new ToDo("Old Title", "Details") { Id = updateToDoDTO.Id };
+            var userId = Guid.NewGuid();
+            var updateToDoDTO = new UpdateToDoDTO { Id = Guid.NewGuid(), UserId = userId, Title = "Test123" };
+            var toDoEntity = new ToDo("Old Title", "Details") { Id = updateToDoDTO.Id, UserId = updateToDoDTO.UserId};
 
             var user = new User(
                 email: "test@example.com",

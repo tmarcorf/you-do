@@ -69,13 +69,85 @@ namespace YouDo.Core.Tests
         {
             var title = "Valid Title";
             var details = new string('b', 501);
-            var userId = Guid.NewGuid();
 
             var act = () => new ToDo(title, details);
 
             act.Should()
                 .Throw<ArgumentException>()
                 .WithMessage(ToDoErrors.InvalidDetailsMaxLength.Message);
+        }
+
+        [Fact]
+        public void Update_ShouldThrowException_InvalidTitle()
+        {
+            var title = "Valid Title";
+            var details = new string('b', 20);
+            var toDo = new ToDo(title, details);
+
+            var act = () => toDo.Update("", "", false);
+
+            act.Should()
+                .Throw<ArgumentException>()
+                .WithMessage(ToDoErrors.InvalidTitle.Message);
+        }
+
+        [Fact]
+        public void Update_ShouldThrowException_InvalidTitleLength()
+        {
+            var title = "Valid Title";
+            var details = new string('b', 20);
+            var userId = Guid.NewGuid();
+            var toDo = new ToDo(title, details);
+
+            var act = () => toDo.Update("Inv", "", false);
+
+            act.Should()
+                .Throw<ArgumentException>()
+                .WithMessage(ToDoErrors.InvalidTitleLength.Message);
+        }
+
+        [Fact]
+        public void Update_ShouldThrowException_InvalidTitleMaxLength()
+        {
+            var title = "Valid Title";
+            var details = new string('b', 20);
+            var userId = Guid.NewGuid();
+            var toDo = new ToDo(title, details);
+
+            var act = () => toDo.Update(new string('a', 101), "", false);
+
+            act.Should()
+                .Throw<ArgumentException>()
+                .WithMessage(ToDoErrors.InvalidTitleMaxLength.Message);
+        }
+
+        [Fact]
+        public void Update_ShouldThrowException_InvalidDetailsMaxLength()
+        {
+            var title = "Valid Title";
+            var details = new string('b', 20);
+            var userId = Guid.NewGuid();
+            var toDo = new ToDo(title, details);
+
+            var act = () => toDo.Update("Valid title", new string('a', 501), false);
+
+            act.Should()
+                .Throw<ArgumentException>()
+                .WithMessage(ToDoErrors.InvalidDetailsMaxLength.Message);
+        }
+
+        [Fact]
+        public void Update_ShouldNotThrowException_ValidData()
+        {
+            var title = "Valid Title";
+            var details = new string('b', 20);
+            var userId = Guid.NewGuid();
+            var toDo = new ToDo(title, details);
+
+            var act = () => toDo.Update("Valid title", "Valid details", false);
+
+            act.Should()
+                .NotThrow<ArgumentException>();
         }
     }
 }
