@@ -55,7 +55,10 @@ namespace YouDo.Application.Extensions
 
         public static ToDo ToEntity(this CreateToDoDTO createToDoDTO)
         {
-            return new ToDo(createToDoDTO.Title, createToDoDTO.Details);
+            var toDo = new ToDo(createToDoDTO.Title, createToDoDTO.Details);
+            toDo.UserId = createToDoDTO.UserId;
+
+            return toDo;
         }
 
         public static ToDoDTO ToDto(this CreateToDoDTO createToDoDTO)
@@ -67,9 +70,11 @@ namespace YouDo.Application.Extensions
             };
         }
 
-        public static ToDo ToEntity(this UpdateToDoDTO updateToDoDTO, ToDo toDo)
+        public static ToDo ToEntity(this UpdateToDoDTO updateToDoDTO)
         {
-            var todo = new ToDo(updateToDoDTO.Title, updateToDoDTO.Details);
+            var toDo = new ToDo(updateToDoDTO.Title, updateToDoDTO.Details);
+            toDo.Id = updateToDoDTO.Id;
+            toDo.UserId = updateToDoDTO.UserId;
             toDo.Completed = updateToDoDTO.Completed;
 
             return toDo;

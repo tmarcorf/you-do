@@ -22,10 +22,6 @@ namespace YouDo.Infraestructure.Data.Repositories
         {
             if (userId.Equals(Guid.Empty)) return Enumerable.Empty<ToDo>();
 
-            var userExist = await _userManager.FindByIdAsync(userId.ToString()) != null;
-
-            if (!userExist) return Enumerable.Empty<ToDo>();
-
             var toDoList = await _context
                 .ToDos
                 .Where(x => x.UserId == userId)
@@ -39,10 +35,6 @@ namespace YouDo.Infraestructure.Data.Repositories
         public async Task<IEnumerable<ToDo>> GetAllFromUserWithSpecifiedCreationDateAsync(Guid userId, DateTime creationDate, int skip, int take)
         {
             if (userId.Equals(Guid.Empty)) return Enumerable.Empty<ToDo>();
-
-            var userExist = await _userManager.FindByIdAsync(userId.ToString()) != null;
-
-            if (!userExist) return Enumerable.Empty<ToDo>();
 
             var toDoList = await _context
                 .ToDos

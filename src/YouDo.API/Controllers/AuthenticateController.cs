@@ -16,7 +16,7 @@ namespace YouDo.API.Controllers
             _authenticateService = authenticateService;
         }
 
-        [HttpPost("create-user")]
+        [HttpPost("register")]
         public async Task<ActionResult> CreateUser([FromBody] CreateUserDTO createUserDTO)
         {
             if (createUserDTO == null) return BadRequest("Invalid data");
@@ -28,7 +28,7 @@ namespace YouDo.API.Controllers
             return Ok($"User {createUserDTO.Email} was successfully created");
         }
 
-        [HttpPost("login-user")]
+        [HttpPost("login")]
         public async Task<ActionResult> Login(LoginUserDTO loginModel)
         {
             if (loginModel == null) return BadRequest("Invalid data");

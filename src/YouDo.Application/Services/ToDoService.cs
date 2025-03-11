@@ -97,8 +97,9 @@ namespace YouDo.Application.Services
             var toDo = await _repository.GetByIdAsync(updateToDoDTO.Id);
 
             if (toDo == null) return Result<ToDoDTO>.Failure(ToDoErrors.InvalidId);
+            if (toDo.UserId != updateToDoDTO.UserId) return Result<ToDoDTO>.Failure(ToDoErrors.InvalidUserId);
 
-            toDo = updateToDoDTO.ToEntity(toDo);
+            toDo.Update(updateToDoDTO.Title, updateToDoDTO.Details, updateToDoDTO.Completed);
             toDo.UpdatedAt = DateTime.UtcNow;
 
             await _repository.UpdateAsync(toDo);

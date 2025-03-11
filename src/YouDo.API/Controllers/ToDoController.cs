@@ -34,13 +34,11 @@ namespace YouDo.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{userId}/{creationDate}/{skip}/{take}")]
-        public async Task<ActionResult> GetAllFromUserWithSpecifiedCreationDate(string userId, DateTime creationDate, int skip = DEFAULT_SKIP, int take = DEFAULT_TAKE)
+        [HttpGet("{creationDate}/{skip}/{take}")]
+        public async Task<ActionResult> GetAllFromUserWithSpecifiedCreationDate(DateTime creationDate, int skip = DEFAULT_SKIP, int take = DEFAULT_TAKE)
         {
-            Guid userIdGuid;
-            if (!Guid.TryParse(userId, out userIdGuid)) return NotFound("ToDos not found");
-
             if (take > LIMIT_TAKE) return BadRequest($"The limit of items per page is {LIMIT_TAKE}");
+            var userIdGuid = GetUserId();
 
             var result = await _service.GetAllFromUserWithSpecifiedCreationDateAsync(userIdGuid, creationDate, skip, take);
 
@@ -66,7 +64,8 @@ namespace YouDo.API.Controllers
         public async Task<ActionResult> Create([FromBody] CreateToDoDTO createToDoModel)
         {
             if (createToDoModel == null) return BadRequest("Invalid data");
-
+            
+            createToDoModel.UserId = GetUserId();
             var result = await _service.CreateAsync(createToDoModel);
 
             if (!result.IsSuccess) return BadRequest(result.Error);
@@ -79,12 +78,7 @@ namespace YouDo.API.Controllers
         {
             if (updateTodoModel == null) return BadRequest("Invalid data");
 
-            var authenticatedUserId = GetUserId();
-            if (updateTodoModel.UserId != authenticatedUserId)
-            {
-                return Unauthorized("You are not authorized to update this resource.");
-            }
-
+            updateTodoModel.UserId = GetUserId();
             var result = await _service.UpdateAsync(updateTodoModel);
 
             if (!result.IsSuccess) return BadRequest(result.Error);

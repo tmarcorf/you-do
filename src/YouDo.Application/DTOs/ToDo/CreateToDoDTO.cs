@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using YouDo.Core.Validations;
 
 namespace YouDo.Application.DTOs.ToDo
@@ -9,6 +10,7 @@ namespace YouDo.Application.DTOs.ToDo
 
         public string Details { get; set; }
 
+        [JsonIgnore]
         public Guid UserId { get; set; }
     }
 }

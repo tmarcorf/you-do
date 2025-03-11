@@ -30,6 +30,15 @@ namespace YouDo.Core.Entities
 
         public User User { get; set; }
 
+        public void Update(string title, string details, bool completed)
+        {
+            Title = title;
+            Details = details;
+            Completed = completed;
+
+            Validate();
+        }
+
         private void Validate()
         {
             if (string.IsNullOrWhiteSpace(Title))
