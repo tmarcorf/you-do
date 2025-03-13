@@ -34,11 +34,14 @@ jobs:
           name: src
           path: src
 
-      - name: Restore dependencies
-        run: dotnet restore src/YouDo.sln  # Substitua pelo nome do seu arquivo .sln
+      - name: Clear NuGet cache
+        run: dotnet nuget locals all --clear
 
-      - name: List files after restore
-        run: ls -R src
+      - name: Restore dependencies
+        run: dotnet restore src/YouDo.sln
+
+      - name: List restored packages
+        run: ls -R ~/.nuget/packages
 
       - name: Upload restored files
         uses: actions/upload-artifact@v4
@@ -57,14 +60,11 @@ jobs:
           name: restored-src
           path: src
 
-      - name: List files after download
-        run: ls -R src
-
-      - name: Verify restored files
-        run: ls -R src/**/obj/project.assets.json
+      - name: List NuGet packages
+        run: ls -R ~/.nuget/packages
 
       - name: Build solution
-        run: dotnet build src/YouDo.sln --no-restore
+        run: dotnet build src/YouDo.sln
 
   test:
     runs-on: ubuntu-latest
