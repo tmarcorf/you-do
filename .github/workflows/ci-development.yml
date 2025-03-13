@@ -37,9 +37,8 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore src/YouDo.sln  # Substitua pelo nome do seu arquivo .sln
 
-      - name: Verify restored files
-        run: |
-          ls -R src/**/obj/project.assets.json
+      - name: List restored files
+        run: ls -R src/**/obj/project.assets.json
 
   build:
     runs-on: ubuntu-latest
