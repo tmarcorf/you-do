@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using YouDo.API.Middlewares;
 using YouDo.Infraestructure.Data.Context;
 using YouDo.Infraestructure.IoC;
 
@@ -21,6 +22,8 @@ namespace YouDo.API
             services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             InitializeDatabase(app);
 

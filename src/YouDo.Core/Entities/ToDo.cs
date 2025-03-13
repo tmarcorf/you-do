@@ -6,7 +6,7 @@ namespace YouDo.Core.Entities
     {
         private const int TITLE_MIN_LENGTH = 5;
         private const int TITLE_MAX_LENGTH = 100;
-        private const int DESCRIPTION_MAX_VALUE = 500;
+        private const int DETAILS_MAX_VALUE = 500;
 
         public ToDo(string title, string details)
         {
@@ -50,7 +50,7 @@ namespace YouDo.Core.Entities
             if (Title.Length > TITLE_MAX_LENGTH)
                 throw new ArgumentException(ToDoErrors.InvalidTitleMaxLength.Message);
 
-            if (Details?.Length > 500)
+            if (Details?.Length > DETAILS_MAX_VALUE)
                 throw new ArgumentException(ToDoErrors.InvalidDetailsMaxLength.Message);
         }
     }
