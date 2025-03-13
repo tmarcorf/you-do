@@ -37,23 +37,31 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore src/YouDo.sln  # Substitua pelo nome do seu arquivo .sln
 
-      - name: List restored files
-        run: ls -R src/**/obj/project.assets.json
+      - name: List files after restore
+        run: ls -R src
+
+      - name: Upload restored files
+        uses: actions/upload-artifact@v4
+        with:
+          name: restored-src
+          path: src
 
   build:
     runs-on: ubuntu-latest
     needs: restore-dependencies
 
     steps:
-      - name: Download source code
+      - name: Download restored files
         uses: actions/download-artifact@v4
         with:
-          name: src
+          name: restored-src
           path: src
 
-      - name: Verify downloaded files
-        run: |
-          ls -R src/**/obj/project.assets.json
+      - name: List files after download
+        run: ls -R src
+
+      - name: Verify restored files
+        run: ls -R src/**/obj/project.assets.json
 
       - name: Build solution
         run: dotnet build src/YouDo.sln --no-restore
@@ -63,10 +71,10 @@ jobs:
     needs: build
 
     steps:
-      - name: Download source code
+      - name: Download restored files
         uses: actions/download-artifact@v4
         with:
-          name: src
+          name: restored-src
           path: src
 
       - name: Run tests
