@@ -8,32 +8,63 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  checkout:
     runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Upload source code
+        uses: actions/upload-artifact@v4
+        with:
+          name: src
+          path: src
+
+  restore-dependencies-and-build:
+    runs-on: ubuntu-latest
+    needs: checkout
+
+    steps:
+      - name: Download source code
+        uses: actions/download-artifact@v4
+        with:
+          name: src
+          path: src
+
+      - name: Clear NuGet cache
+        run: dotnet nuget locals all --clear
+
+      - name: Restore dependencies
+        run: dotnet restore src/YouDo.sln
+
+      - name: Build solution
+        run: dotnet build src/YouDo.sln
+
+      - name: Upload restored files
+        uses: actions/upload-artifact@v4
+        with:
+          name: restored-src
+          path: src
+
+  test:
+    runs-on: ubuntu-latest
+    needs: restore-dependencies-and-build
     env: 
       SECRETKEYTEST: ${{ secrets.SECRETKEYTEST }}
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: | 
-        cd src
-        dotnet restore
+      - name: Download restored files
+        uses: actions/download-artifact@v4
+        with:
+          name: restored-src
+          path: src
 
-    - name: Build solution
-      run: |
-        cd src
-        dotnet build --no-restore
-
-    - name: Run tests
-      run: |
-        cd src
-        dotnet test -t
-        dotnet test --no-build --verbosity normal
+      - name: Run tests
+        run: dotnet test src/YouDo.sln --no-build --verbosity normal
 
