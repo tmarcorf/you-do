@@ -35,13 +35,15 @@ jobs:
           path: src
 
       - name: Restore dependencies
-        run: dotnet restore src
+        run: dotnet restore src/YouDo.sln  # Substitua pelo nome do seu arquivo .sln
+
+      - name: Verify restored files
+        run: |
+          ls -R src/**/obj/project.assets.json
 
   build:
     runs-on: ubuntu-latest
     needs: restore-dependencies
-    env:
-      SECRETKEYTEST: ${{ secrets.SECRETKEYTEST }}
 
     steps:
       - name: Download source code
@@ -50,8 +52,12 @@ jobs:
           name: src
           path: src
 
+      - name: Verify downloaded files
+        run: |
+          ls -R src/**/obj/project.assets.json
+
       - name: Build solution
-        run: dotnet build src --no-restore
+        run: dotnet build src/YouDo.sln --no-restore
 
   test:
     runs-on: ubuntu-latest
@@ -65,5 +71,4 @@ jobs:
           path: src
 
       - name: Run tests
-        run: dotnet test src --no-build --verbosity normal
-    
+        run: dotnet test src/YouDo.sln --no-build --verbosity normal
