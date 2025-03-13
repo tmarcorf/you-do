@@ -1,4 +1,4 @@
-name: CD - Production
+name: CD Production
 
 # Este workflow só será executado após o ci-production ter sido concluído com sucesso
 on:
