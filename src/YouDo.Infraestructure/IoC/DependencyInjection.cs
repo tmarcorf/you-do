@@ -20,7 +20,7 @@ namespace YouDo.Infraestructure.IoC
             var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
             services.AddDbContext<ApplicationDbContext>(
-                options => options.UseNpgsql(connectionString, 
+                options => options.UseNpgsql(connectionString,
                 options => options.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
             );
 

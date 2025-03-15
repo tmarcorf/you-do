@@ -19,11 +19,17 @@ namespace YouDo.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> CreateUser([FromBody] CreateUserDTO createUserDTO)
         {
-            if (createUserDTO == null) return BadRequest("Invalid data");
+            if (createUserDTO == null)
+            {
+                return BadRequest("Invalid data");
+            }
 
             var createResult = await _authenticateService.RegisterUser(createUserDTO, createUserDTO.Password);
 
-            if (!createResult.IsSuccess) return BadRequest(createResult);
+            if (!createResult.IsSuccess)
+            {
+                return BadRequest(createResult);
+            }
 
             return Ok($"User {createUserDTO.Email} was successfully created");
         }
@@ -31,11 +37,17 @@ namespace YouDo.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult> Login(LoginUserDTO loginModel)
         {
-            if (loginModel == null) return BadRequest("Invalid data");
+            if (loginModel == null)
+            {
+                return BadRequest("Invalid data");
+            }
 
             var result = await _authenticateService.Authenticate(loginModel.Email, loginModel.Password);
 
-            if (!result.IsSuccess) return NotFound(result.Error.Message);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result.Error.Message);
+            }
 
             return Ok(result.Data);
         }

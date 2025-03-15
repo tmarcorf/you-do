@@ -9,7 +9,7 @@ namespace YouDo.Infraestructure.Data.Context
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             var connectionString = Environment.GetEnvironmentVariable("YouDoDefaultConnection");
-            
+
             optionsBuilder.UseNpgsql(connectionString);
 
             return new ApplicationDbContext(optionsBuilder.Options);

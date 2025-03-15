@@ -51,7 +51,10 @@ namespace YouDo.Application.Services
         {
             var result = Validate(createUserDTO);
 
-            if (!result.IsSuccess) return result;
+            if (!result.IsSuccess)
+            {
+                return result;
+            }
 
             var user = createUserDTO.ToEntity();
             user.UserName = createUserDTO.Email;
@@ -81,7 +84,7 @@ namespace YouDo.Application.Services
                 new Claim("email", user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-            
+
             var privateKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(
                     Environment.GetEnvironmentVariable(

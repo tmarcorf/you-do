@@ -20,7 +20,10 @@ namespace YouDo.Infraestructure.Data.Repositories
 
         public async Task<IEnumerable<ToDo>> GetAllFromUserAsync(Guid userId, int skip, int take)
         {
-            if (userId.Equals(Guid.Empty)) return Enumerable.Empty<ToDo>();
+            if (userId.Equals(Guid.Empty))
+            {
+                return Enumerable.Empty<ToDo>();
+            }
 
             var toDoList = await _context
                 .ToDos
@@ -34,11 +37,14 @@ namespace YouDo.Infraestructure.Data.Repositories
 
         public async Task<IEnumerable<ToDo>> GetAllFromUserWithSpecifiedCreationDateAsync(Guid userId, DateTime creationDate, int skip, int take)
         {
-            if (userId.Equals(Guid.Empty)) return Enumerable.Empty<ToDo>();
+            if (userId.Equals(Guid.Empty))
+            {
+                return Enumerable.Empty<ToDo>();
+            }
 
             var toDoList = await _context
                 .ToDos
-                .Where(x => x.UserId == userId && 
+                .Where(x => x.UserId == userId &&
                             x.CreatedAt.Date == creationDate.Date)
                 .Skip(skip)
                 .Take(take)
@@ -63,7 +69,7 @@ namespace YouDo.Infraestructure.Data.Repositories
 
             return toDo;
         }
-        
+
         public async Task<ToDo> UpdateAsync(ToDo toDo)
         {
             _context.ToDos.Update(toDo);

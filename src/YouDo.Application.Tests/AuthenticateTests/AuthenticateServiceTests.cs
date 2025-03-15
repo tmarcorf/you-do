@@ -72,10 +72,10 @@ namespace YouDo.Application.Tests.AuthenticateTests
             var password = "correctpassword";
 
             var user = new User(
-                "test@example.com", 
-                "John", 
-                "Doe", 
-                new DateTime(1990, 1, 1), 
+                "test@example.com",
+                "John",
+                "Doe",
+                new DateTime(1990, 1, 1),
                 EnumGender.MALE);
 
             _fakeSignInManager.SetPasswordSignInResult(SignInResult.Success);

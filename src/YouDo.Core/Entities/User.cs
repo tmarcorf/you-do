@@ -33,22 +33,34 @@ namespace YouDo.Core.Entities
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
 
             if (!Regex.IsMatch(Email, emailPattern))
+            {
                 throw new ArgumentException(UserErrors.InvalidEmail.Message);
+            }
 
             if (string.IsNullOrWhiteSpace(FirstName))
+            {
                 throw new ArgumentException(UserErrors.InvalidFirstName.Message);
+            }
 
             if (string.IsNullOrWhiteSpace(LastName))
+            {
                 throw new ArgumentException(UserErrors.InvalidLastName.Message);
+            }
 
             if (DateOfBirth <= DateTime.MinValue)
+            {
                 throw new ArgumentException(UserErrors.InvalidDateOfBirth.Message);
+            }
 
             if (DateOfBirth > DateTime.UtcNow)
+            {
                 throw new ArgumentException(UserErrors.DateOfBirthGreaterThanCurrentDate.Message);
+            }
 
             if (!Enum.IsDefined(typeof(EnumGender), Gender))
+            {
                 throw new ArgumentException(UserErrors.InvalidGender.Message);
+            }
         }
     }
 }

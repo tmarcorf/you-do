@@ -231,7 +231,7 @@ namespace YouDo.Application.Tests.ToDoTests
         {
             var userId = Guid.NewGuid();
             var updateToDoDTO = new UpdateToDoDTO { Id = Guid.NewGuid(), UserId = userId, Title = "Test123" };
-            var toDoEntity = new ToDo("Old Title", "Details") { Id = updateToDoDTO.Id, UserId = updateToDoDTO.UserId};
+            var toDoEntity = new ToDo("Old Title", "Details") { Id = updateToDoDTO.Id, UserId = updateToDoDTO.UserId };
 
             var user = new User(
                 email: "test@example.com",

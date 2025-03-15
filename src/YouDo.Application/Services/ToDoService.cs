@@ -75,7 +75,10 @@ namespace YouDo.Application.Services
             //Validate data
             var result = Validate(createToDoDTO);
 
-            if (!result.IsSuccess) return result;
+            if (!result.IsSuccess)
+            {
+                return result;
+            }
 
             var toDo = createToDoDTO.ToEntity();
             toDo.Id = Guid.NewGuid();
@@ -92,12 +95,22 @@ namespace YouDo.Application.Services
         {
             var result = Validate(updateToDoDTO);
 
-            if (!result.IsSuccess) return result;
+            if (!result.IsSuccess)
+            {
+                return result;
+            }
 
             var toDo = await _repository.GetByIdAsync(updateToDoDTO.Id);
 
-            if (toDo == null) return Result<ToDoDTO>.Failure(ToDoErrors.InvalidId);
-            if (toDo.UserId != updateToDoDTO.UserId) return Result<ToDoDTO>.Failure(ToDoErrors.InvalidUserId);
+            if (toDo == null)
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidId);
+            }
+
+            if (toDo.UserId != updateToDoDTO.UserId)
+            {
+                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidUserId);
+            }
 
             toDo.Update(updateToDoDTO.Title, updateToDoDTO.Details, updateToDoDTO.Completed);
             toDo.UpdatedAt = DateTime.UtcNow;
@@ -111,7 +124,10 @@ namespace YouDo.Application.Services
         {
             var toDo = await _repository.GetByIdAsync(id);
 
-            if (toDo == null) return Result<bool>.Failure(ToDoErrors.InvalidId);
+            if (toDo == null)
+            {
+                return Result<bool>.Failure(ToDoErrors.InvalidId);
+            }
 
             var deleted = await _repository.DeleteAsync(toDo);
 

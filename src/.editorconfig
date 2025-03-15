@@ -1,0 +1,38 @@
+[*.cs]
+
+trim_trailing_whitespace = true
+# Convenções de nomenclatura
+dotnet_naming_rule.types_should_be_pascal_case.symbols = types
+dotnet_naming_rule.types_should_be_pascal_case.style = pascal_case
+dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum, delegate
+
+dotnet_naming_rule.fields_should_be_camel_case.symbols = fields
+dotnet_naming_rule.fields_should_be_camel_case.style = camel_case
+dotnet_naming_symbols.fields.applicable_kinds = field
+
+# Espaçamento e formatação
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+csharp_new_line_before_members_in_object_initializers = true
+csharp_new_line_before_members_in_anonymous_types = true
+csharp_new_line_between_query_expression_clauses = true
+csharp_new_line_between_statements = true
+csharp_new_line_between_methods = true
+csharp_new_line_between_blocks = true
+max_line_length = 120
+max_blank_lines_between_statements = 1
+max_blank_lines_between_methods = 1
+dotnet_style_allow_multiple_blank_lines_experimental = false
+# Uso de chaves
+csharp_prefer_braces = true:warning
+
+# Preferências de código
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_expression_bodied_accessors = when_on_single_line:suggestion
+csharp_style_expression_bodied_constructors = when_on_single_line:suggestion
+csharp_style_expression_bodied_operators = when_on_single_line:suggestion
+csharp_style_expression_bodied_properties = true:suggestion

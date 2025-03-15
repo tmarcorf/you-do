@@ -24,7 +24,7 @@ namespace YouDo.Infraestructure.IoC
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
-                    { 
+                    {
                         new OpenApiSecurityScheme
                         {
                             Reference = new OpenApiReference
