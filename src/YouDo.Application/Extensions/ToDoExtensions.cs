@@ -31,7 +31,10 @@ namespace YouDo.Application.Extensions
 
         public static ToDo ToEntity(this ToDoDTO toDoDTO)
         {
-            if (toDoDTO is null) return null;
+            if (toDoDTO is null)
+            {
+                return null;
+            }
 
             var toDo = new ToDo(toDoDTO.Title, toDoDTO.Details);
             toDo.Id = toDoDTO.Id;
