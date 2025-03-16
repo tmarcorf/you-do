@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using YouDo.API.Responses;
 using YouDo.Application.DTOs.ToDo;
 using YouDo.Application.Interfaces;
 
@@ -26,7 +27,7 @@ namespace YouDo.API.Controllers
         {
             if (take > LIMIT_TAKE)
             {
-                return BadRequest($"The limit of items per page is {LIMIT_TAKE}");
+                return BadRequest(ApiResponse<IEnumerable<ToDoDTO>>.Failure($"The limit of items per page is {LIMIT_TAKE}"));
             }
 
             var userIdGuid = GetUserId();
@@ -34,10 +35,10 @@ namespace YouDo.API.Controllers
 
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Error);
+                return BadRequest(ApiResponse<IEnumerable<ToDoDTO>>.Failure(result.Error.Message));
             }
 
-            return Ok(result);
+            return Ok(ApiResponse<IEnumerable<ToDoDTO>>.Success(result.Data));
         }
 
         [HttpGet("{creationDate}/{skip}/{take}")]
@@ -45,7 +46,7 @@ namespace YouDo.API.Controllers
         {
             if (take > LIMIT_TAKE)
             {
-                return BadRequest($"The limit of items per page is {LIMIT_TAKE}");
+                return BadRequest(ApiResponse<IEnumerable<ToDoDTO>>.Failure($"The limit of items per page is {LIMIT_TAKE}"));
             }
 
             var userIdGuid = GetUserId();
@@ -54,10 +55,10 @@ namespace YouDo.API.Controllers
 
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Error);
+                return BadRequest(ApiResponse<IEnumerable<ToDoDTO>>.Failure(result.Error.Message));
             }
 
-            return Ok(result);
+            return Ok(ApiResponse<IEnumerable<ToDoDTO>>.Success(result.Data));
         }
 
         [HttpGet("{id}")]
@@ -66,17 +67,17 @@ namespace YouDo.API.Controllers
             Guid idGuid;
             if (!Guid.TryParse(id, out idGuid))
             {
-                return NotFound("ToDo not found");
+                return BadRequest(ApiResponse<ToDoDTO>.Failure("Invalid Id. Id is required"));
             }
 
             var result = await _service.GetByIdAsync(idGuid);
 
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Error);
+                return NotFound(ApiResponse<ToDoDTO>.Failure(result.Error.Message, "404"));
             }
 
-            return Ok(result);
+            return Ok(ApiResponse<ToDoDTO>.Success(result.Data));
         }
 
         [HttpPost("create")]
@@ -84,7 +85,7 @@ namespace YouDo.API.Controllers
         {
             if (createToDoModel == null)
             {
-                return BadRequest("Invalid data");
+                return BadRequest(ApiResponse<ToDoDTO>.Failure("Invalid data"));
             }
 
             createToDoModel.UserId = GetUserId();
@@ -92,10 +93,10 @@ namespace YouDo.API.Controllers
 
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Error);
+                return BadRequest(ApiResponse<ToDoDTO>.Failure(result.Error.Message));
             }
 
-            return Ok(result);
+            return Ok(ApiResponse<ToDoDTO>.Success(result.Data));
         }
 
         [HttpPut("update")]
@@ -103,7 +104,7 @@ namespace YouDo.API.Controllers
         {
             if (updateTodoModel == null)
             {
-                return BadRequest("Invalid data");
+                return BadRequest(ApiResponse<ToDoDTO>.Failure("Invalid data"));
             }
 
             updateTodoModel.UserId = GetUserId();
@@ -111,10 +112,10 @@ namespace YouDo.API.Controllers
 
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Error);
+                return BadRequest(ApiResponse<ToDoDTO>.Failure(result.Error.Message));
             }
 
-            return Ok(result);
+            return Ok(ApiResponse<ToDoDTO>.Success(result.Data));
         }
 
         [HttpDelete("delete/{id}")]
@@ -123,17 +124,17 @@ namespace YouDo.API.Controllers
             Guid idGuid;
             if (!Guid.TryParse(id, out idGuid))
             {
-                return NotFound("ToDo not found");
+                return BadRequest(ApiResponse<bool>.Failure("Invalid Id. Id is required"));
             }
 
             var result = await _service.DeleteAsync(idGuid);
 
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Error);
+                return NotFound(ApiResponse<bool>.Failure(result.Error.Message, "404"));
             }
 
-            return Ok(result);
+            return Ok(ApiResponse<bool>.Success(result.Data));
         }
 
         private Guid GetUserId()
@@ -143,7 +144,7 @@ namespace YouDo.API.Controllers
 
             if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out userId))
             {
-                throw new UnauthorizedAccessException("Not authorized user.");
+                throw new UnauthorizedAccessException("Not authorized user");
             }
 
             return userId;

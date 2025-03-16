@@ -62,11 +62,6 @@ namespace YouDo.Application.Services
 
             var toDo = await _repository.GetByIdAsync(id);
 
-            if (toDo == null)
-            {
-                return Result<ToDoDTO>.Failure(ToDoErrors.InvalidId);
-            }
-
             return Result<ToDoDTO>.Success(toDo.ToDto());
         }
 

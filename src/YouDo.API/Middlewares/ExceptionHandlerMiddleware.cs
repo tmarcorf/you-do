@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using YouDo.API.Responses;
+using YouDo.Application.DTOs.ToDo;
+using YouDo.Application.Results;
 
 namespace YouDo.API.Middlewares
 {
@@ -35,12 +38,7 @@ namespace YouDo.API.Middlewares
                 _ => StatusCodes.Status500InternalServerError
             };
 
-            var response = new
-            {
-                Code = statusCode,
-                Message = ex.Message,
-                Timestamp = DateTime.UtcNow
-            };
+            var response = ApiResponse<object>.Failure(ex.Message, statusCode.ToString());
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = statusCode;
