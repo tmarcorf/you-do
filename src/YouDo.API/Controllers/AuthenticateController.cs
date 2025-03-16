@@ -2,6 +2,8 @@
 using YouDo.API.Extensions;
 using YouDo.Application.Interfaces;
 using YouDo.Application.DTOs.Authenticate;
+using YouDo.API.Responses;
+using Microsoft.AspNetCore.Identity;
 
 namespace YouDo.API.Controllers
 {
@@ -21,17 +23,17 @@ namespace YouDo.API.Controllers
         {
             if (createUserDTO == null)
             {
-                return BadRequest("Invalid data");
+                return BadRequest(ApiResponse<string>.Failure("Invalid data"));
             }
 
             var createResult = await _authenticateService.RegisterUser(createUserDTO, createUserDTO.Password);
 
             if (!createResult.IsSuccess)
             {
-                return BadRequest(createResult);
+                return BadRequest(ApiResponse<string>.Failure(createResult.Error.Message));
             }
 
-            return Ok($"User {createUserDTO.Email} was successfully created");
+            return Ok(ApiResponse<string>.Success($"User {createUserDTO.Email} was successfully created"));
         }
 
         [HttpPost("login")]
@@ -39,17 +41,17 @@ namespace YouDo.API.Controllers
         {
             if (loginModel == null)
             {
-                return BadRequest("Invalid data");
+                return BadRequest(ApiResponse<UserTokenDTO>.Failure("Invalid data"));
             }
 
             var result = await _authenticateService.Authenticate(loginModel.Email, loginModel.Password);
 
             if (!result.IsSuccess)
             {
-                return NotFound(result.Error.Message);
+                return NotFound(ApiResponse<UserTokenDTO>.Failure(result.Error.Message, "404"));
             }
 
-            return Ok(result.Data);
+            return Ok(ApiResponse<UserTokenDTO>.Success(result.Data));
         }
     }
 }
