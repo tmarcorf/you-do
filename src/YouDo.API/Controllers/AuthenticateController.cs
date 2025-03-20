@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using YouDo.API.Extensions;
-using YouDo.Application.Interfaces;
-using YouDo.Application.DTOs.Authenticate;
 using YouDo.API.Responses;
-using Microsoft.AspNetCore.Identity;
+using YouDo.Application.DTOs.Authenticate;
+using YouDo.Application.Interfaces;
 
 namespace YouDo.API.Controllers
 {
