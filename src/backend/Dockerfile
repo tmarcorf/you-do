@@ -1,6 +1,6 @@
 # Use a imagem oficial do .NET SDK 8 para construir a aplicação
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
+WORKDIR /src/backend
 
 # Copie apenas os projetos necessários
 COPY ["YouDo.API/YouDo.API.csproj", "YouDo.API/"]

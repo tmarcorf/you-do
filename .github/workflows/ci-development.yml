@@ -21,7 +21,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: src
-          path: src
+          path: src/backend
 
   restore-dependencies-and-build:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: src
-          path: src
+          path: src/backend
 
       - name: Clear NuGet cache
         run: dotnet nuget locals all --clear
@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: restored-src
-          path: src
+          path: src/backend
 
   test:
     runs-on: ubuntu-latest
@@ -63,7 +63,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: restored-src
-          path: src
+          path: src/backend
 
       - name: Run tests
         run: dotnet test src/YouDo.sln --no-build --verbosity normal
