@@ -38,13 +38,13 @@ jobs:
         run: dotnet nuget locals all --clear
 
       - name: Restore dependencies
-        run: dotnet restore src/YouDo.sln
+        run: dotnet restore src/backend/YouDo.sln
 
       - name: Build solution
-        run: dotnet build src/YouDo.sln
+        run: dotnet build src/backend/YouDo.sln
 
       - name: Checkout code formatting
-        run: dotnet format src/YouDo.sln --verify-no-changes
+        run: dotnet format src/backend/YouDo.sln --verify-no-changes
 
       - name: Upload restored files
         uses: actions/upload-artifact@v4
@@ -66,4 +66,4 @@ jobs:
           path: src/backend
 
       - name: Run tests
-        run: dotnet test src/YouDo.sln --no-build --verbosity normal
+        run: dotnet test src/backend/YouDo.sln --no-build --verbosity normal
