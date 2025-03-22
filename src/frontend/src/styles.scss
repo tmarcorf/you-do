@@ -1,0 +1,38 @@
+* {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+:root {
+    --primary-color: #1e90ff; // Azul
+    --secondary-color: #2ecc71; // Verde
+    --background-color: #2d2d2d; // Cinza escuro
+    --text-color: #ffffff; // Branco
+    --card-background: #1e1e1e; // Preto
+    --button-hover: #3d3d3d; // Cinza mais claro
+  }
+  
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .primary-button {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  
+    &:hover {
+      background-color: var(--button-hover);
+    }
+  }
