@@ -2,6 +2,7 @@
     font-family: 'Source Code Pro', monospace;
     font-size: 16px;
     line-height: 1.5;
+    color: white;;
 }
 
 :root {
@@ -15,24 +16,4 @@
   
   body {
     background-color: var(--background-color);
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-  }
-
-  .primary-button {
-    background-color: var(--primary-color);
-    color: var(--text-color);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  
-    &:hover {
-      background-color: var(--button-hover);
-    }
   }
