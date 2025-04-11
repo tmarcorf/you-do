@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 })
 export class PomodoroComponent {
   currentTimer = '25:00';
+  inExecution = false;
 
   startTimer() {
     throw new Error('Method not implemented.');
