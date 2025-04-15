@@ -1,12 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { PomodoroComponent } from "./pomodoro/pomodoro.component";
+import { HomeComponent } from './components/home/home.component';
 
 @Component({
   selector: 'app-root',
-  imports: [PomodoroComponent],
+  imports: [HomeComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'You-Do App';
+
+  submit(event: any){
+    console.log(event)
+  }
+
+  logar(event: string) {
+    console.log(event)
+  }
+
 }
