@@ -20,6 +20,16 @@ namespace YouDo.API
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("YouDoApp",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:4200");
+                        policy.AllowAnyMethod();
+                        policy.AllowAnyHeader();
+                    });
+            });
 
             var app = builder.Build();
 
@@ -37,6 +47,7 @@ namespace YouDo.API
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
+            app.UseCors("YouDoApp");
             app.UseAuthorization();
 
             app.MapControllers();
