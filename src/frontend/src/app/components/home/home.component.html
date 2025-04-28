@@ -1,3 +1,17 @@
 <p>Home works!</p>
 
-<button (click)="showSnackBar()">Show snackBar</button>
+<button class="btn-primary" (click)="showSnackBar()">Show snackBar</button>
+
+
+
+<div class="card-area">
+    @for (toDo of toDos; track $index) {
+        <div class="card">
+            <h2>{{ toDo.title }}</h2>
+            <p><strong>Detalhes:</strong> {{ toDo.details }}</p>
+            <p><strong>Criado em:</strong> {{ toDo.createdAt }}</p>
+            <p><strong>Atualizado em:</strong> {{ toDo.updatedAt }}</p>
+            <p><strong>Concluído:</strong> {{ toDo.completed ? 'Sim' : 'Não' }}</p>
+        </div>
+    }   
+</div>
