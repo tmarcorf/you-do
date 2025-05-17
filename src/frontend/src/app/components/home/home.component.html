@@ -1,9 +1,5 @@
 <p>Home works!</p>
 
-<button class="btn-primary" (click)="showSnackBar()">Show snackBar</button>
-
-
-
 <div class="card-area">
     @for (toDo of toDos; track $index) {
         <div class="card">
@@ -14,8 +10,4 @@
             <p><strong>Concluído:</strong> {{ toDo.completed ? 'Sim' : 'Não' }}</p>
         </div>
     }   
-
-    <script>
-        localStorage.setItem("teste", "valor");
-    </script>
 </div>

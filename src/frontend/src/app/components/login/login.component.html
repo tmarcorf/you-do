@@ -1,0 +1,44 @@
+<!-- <app-navbar></app-navbar> -->
+
+<div class="page-wrapper">
+  <div id="login-container">
+    <form (ngSubmit)="login()" #loginForm="ngForm">
+      <h1 class="form-item">YouDo - Login</h1>
+
+      <div class="form-group">
+        <label class="form-item" for="email">Email</label>
+        <input
+          class="form-item"
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-item" for="password">Password</label>
+        <input
+          class="form-item"
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="password"
+        />
+      </div>
+
+      <button id="btn-login" class="btn btn-primary form-item" type="submit">Login</button>
+
+      <div id="new-account-container" class="form-group">
+        <hr class="form-item">
+        <p class="form-item">New here ?</p>
+        <button class="btn btn-secondary form-item" type="button">Create an account</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  
+

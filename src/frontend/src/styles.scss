@@ -7,7 +7,7 @@
 
 :root {
     --primary-color: #1e90ff; // Azul
-    --secondary-color: #2ecc71; // Verde
+    --secondary-color: #aeafaf; // Verde
     --background-color: #2d2d2d; // Cinza escuro
     --text-color: #ffffff; // Branco
     --card-background: #1e1e1e; // Preto
@@ -24,4 +24,54 @@ html, body {
 body { 
   margin: 0; 
   font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+
+// forms
+
+.form-item {
+  margin: 5px 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group {
+  width: 100%;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.btn {
+  color: var(--text-color);
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+}
+
+.btn:active {
+  transform: translateY(2px); /* move o botão para baixo */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* sombra mais próxima */
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+}
+
+// inputs
+
+input {
+  background-color: var(--card-background);
+  color: var(--text-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 5px;
+  padding: 10px;  
 }
