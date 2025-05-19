@@ -1,1 +1,19 @@
-<p>navbar works!</p>
+<div id="nav-bar">
+  <div id="home-link">
+    <a href="/">YouDo</a>
+  </div>
+
+  <div id="user-section">
+
+    @if(this.userName != '') {
+      <span id="greeting">Hello, {{this.userName}}</span>
+    }
+
+    @if(router.url !== '/login') {
+      <a id="login-button" href="/login">
+        <button class="btn btn-primary">Login</button>
+      </a>
+    }
+
+  </div>
+</div>
