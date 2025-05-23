@@ -5,6 +5,7 @@ import { LoginService } from '../../services/LoginService';
 import { Router } from '@angular/router';
 import { AppConstants } from '../../shared/AppConstants';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { StorageService } from '../../services/StorageService';
 
 @Component({
   selector: 'app-login',
@@ -12,19 +13,17 @@ import { NavbarComponent } from '../navbar/navbar.component';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   
   email = '';
   password = '';
 
   constructor(
     private notificationService: NotificationService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private router: Router,
+    private storageService: StorageService
   ) { }
-
-  ngOnInit(): void {
-    
-  }
 
   login() {
     if(this.isValidLoginData()) {
@@ -33,9 +32,11 @@ export class LoginComponent implements OnInit {
       userToken.subscribe({
         next: (response: any) => {
           this.notificationService.success("Login efetuado com sucesso!");
-          localStorage.setItem(AppConstants.TOKEN_KEY, response.data.token);
+          this.storageService.set(AppConstants.TOKEN_KEY, response.data.token);
+          this.router.navigate(['/home']);
         },
         error: (response: any) => {
+          debugger;
           this.notificationService.error(response.error.message);
         }
       })

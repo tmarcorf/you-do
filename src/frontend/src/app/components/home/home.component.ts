@@ -12,20 +12,23 @@ import { NavbarComponent } from '../navbar/navbar.component';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   private loginService = inject(LoginService);
   private toDoService = inject(ToDoService);
-  toDos: ToDo[] = [];
+  toDos: ToDo[] = [
+    {
+      id: 'string',
+      title: 'string',
+      details: 'string',
+      createdAt: new Date,
+      updatedAt: new Date,
+      completed: false
+    }
+  ];
 
   constructor(private router: Router){
-
+    
   }
-  ngOnInit(): void {
-    var token = localStorage.getItem(AppConstants.TOKEN_KEY);
-
-    if (token == '') {
-      this.router.navigate(['/login']);
-    }
-  }
+  
 
 }
