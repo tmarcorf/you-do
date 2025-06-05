@@ -1,1 +1,7 @@
-<p>card works!</p>
+<div class="card">
+    <h2>{{ title }}</h2>
+    <p><strong>Detalhes:</strong> {{ details }}</p>
+    <p><strong>Criado em:</strong> {{ createdAt }}</p>
+    <p><strong>Atualizado em:</strong> {{ updatedAt }}</p>
+    <p><strong>Concluído:</strong> {{ completed ? 'Sim' : 'Não' }}</p>
+</div>

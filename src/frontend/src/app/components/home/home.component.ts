@@ -5,30 +5,68 @@ import { ToDoService } from '../../services/ToDoService';
 import { Router } from '@angular/router';
 import { AppConstants } from '../../shared/AppConstants';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { HttpClient } from '@angular/common/http';
+import { error } from 'console';
+import { response } from 'express';
+import { NotificationComponent } from '../notification/notification.component';
+import { NotificationService } from '../../services/NotificationService';
+import { StorageService } from '../../services/StorageService';
+import { json } from 'stream/consumers';
+import { CardComponent } from "../card/card.component";
 
 @Component({
   selector: 'app-home',
-  imports: [NavbarComponent],
+  imports: [NavbarComponent, CardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   private loginService = inject(LoginService);
   private toDoService = inject(ToDoService);
-  toDos: ToDo[] = [
-    {
-      id: 'string',
-      title: 'string',
-      details: 'string',
-      createdAt: new Date,
-      updatedAt: new Date,
-      completed: false
-    }
-  ];
+  userName: string = '';
 
-  constructor(private router: Router){
+  toDos: ToDo[] = [];
+
+  constructor(
+    private router: Router,
+    private notificationService: NotificationService,
+    private storageService: StorageService
+  ){
     
   }
-  
+  ngOnInit(): void {
+    var baseUrl = AppConstants.BASE_URL + '/home';
 
+    this.configureUserInfo();
+
+    const userNameStored = this.storageService.get(AppConstants.YD_USERNAME) ?? '';
+    this.userName =  userNameStored != '' ? userNameStored?.toString() : '';
+    this.getAllFromUser();
+  }
+
+  configureUserInfo() {
+    const userInfo = this.loginService.getUserInfo();
+
+    userInfo.subscribe({
+        next: (response: any) => {
+          this.storageService.set(AppConstants.YD_USERNAME, response.data.firstName);
+        },
+        error: (response: any) => {
+          this.router.navigate(['/login']);
+        }
+    })
+  }
+  
+  getAllFromUser() {
+    var toDosResponse = this.toDoService.getAllFromUser(0, 5);
+
+    toDosResponse.subscribe({
+      next: (response: any) => {
+        this.toDos = response.data;
+      },
+      error: (response: any) => {
+        this.notificationService.error(response.message);
+      }
+    });
+  }
 }

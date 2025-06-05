@@ -31,6 +31,7 @@ export class LoginComponent {
 
       userToken.subscribe({
         next: (response: any) => {
+          debugger;
           this.notificationService.success("Login efetuado com sucesso!");
           this.storageService.set(AppConstants.TOKEN_KEY, response.data.token);
           this.router.navigate(['/home']);

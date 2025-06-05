@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import {MatCardModule} from '@angular/material/card';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-card',
@@ -8,5 +7,9 @@ import {MatCardModule} from '@angular/material/card';
   styleUrl: './card.component.scss'
 })
 export class CardComponent {
-  
+  @Input() title!: string;
+  @Input() details!: string;
+  @Input() createdAt!: Date;
+  @Input() updatedAt!: Date;
+  @Input() completed!: boolean;
 }
