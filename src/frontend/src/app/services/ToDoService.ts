@@ -10,8 +10,6 @@ import { AppConstants } from "../shared/AppConstants";
   providedIn: 'root'
 })
 export class ToDoService {
-    private BASE_URL = 'http://localhost:7069/api';
-
     constructor(
         private http: HttpClient,
         private storageService: StorageService){}
@@ -25,5 +23,15 @@ export class ToDoService {
         });
         
         return this.http.get(AppConstants.BASE_URL + '/todo/' + skip + '/' + take, {headers});
+    }
+
+    delete(id: string) : any {
+        const token = this.storageService.get(AppConstants.TOKEN_KEY);
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+
+        return this.http.delete(AppConstants.BASE_URL + '/todo/delete/' + id, {headers});
     }
 }

@@ -10,7 +10,7 @@ namespace YouDo.API.Responses
         [JsonPropertyName("data")]
         public T Data { get; private set; }
 
-        [JsonPropertyName("is_success")]
+        [JsonPropertyName("isSuccess")]
         public bool IsSuccess { get; private set; }
 
         [JsonPropertyName("message")]

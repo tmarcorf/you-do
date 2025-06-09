@@ -5,10 +5,6 @@ import { ToDoService } from '../../services/ToDoService';
 import { Router } from '@angular/router';
 import { AppConstants } from '../../shared/AppConstants';
 import { NavbarComponent } from '../navbar/navbar.component';
-import { HttpClient } from '@angular/common/http';
-import { error } from 'console';
-import { response } from 'express';
-import { NotificationComponent } from '../notification/notification.component';
 import { NotificationService } from '../../services/NotificationService';
 import { StorageService } from '../../services/StorageService';
 import { json } from 'stream/consumers';
@@ -58,7 +54,7 @@ export class HomeComponent implements OnInit {
   }
   
   getAllFromUser() {
-    var toDosResponse = this.toDoService.getAllFromUser(0, 5);
+    var toDosResponse = this.toDoService.getAllFromUser(0, 30);
 
     toDosResponse.subscribe({
       next: (response: any) => {

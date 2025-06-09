@@ -26,7 +26,6 @@ export class NavbarComponent implements OnInit {
   }
 
   clearData() {
-    debugger;
     this.storageService.clearAll();
   }
 }
