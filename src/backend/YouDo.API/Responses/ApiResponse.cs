@@ -19,7 +19,7 @@ namespace YouDo.API.Responses
         [JsonPropertyName("timestamp")]
         public DateTime Timestamp => DateTime.UtcNow;
 
-        public ApiResponse(string code, T data, bool isSuccess, string message = null)
+        private ApiResponse(string code, T data, bool isSuccess, string message = null)
         {
             Code = code;
             Data = data;
