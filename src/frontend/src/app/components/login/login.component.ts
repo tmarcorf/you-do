@@ -34,9 +34,6 @@ export class LoginComponent {
           this.notificationService.success("Login efetuado com sucesso!");
           this.storageService.set(AppConstants.TOKEN_KEY, response.data.token);
           this.router.navigate(['/home']);
-        },
-        error: (response: any) => {
-          this.notificationService.error(response.error.message);
         }
       })
     }
