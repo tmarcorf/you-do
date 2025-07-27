@@ -1,0 +1,20 @@
+<app-navbar></app-navbar>
+
+<button id="btn-add-task" class="btn btn-add">Add Task</button>
+
+@if (toDos.length == 0) {
+    <h1 id="empty-tasks-title">No tasks to show!</h1>
+} @else {
+    <div class="cards-area">
+        @for (toDo of toDos; track $index) {
+            <app-card 
+                [id]="toDo.id"
+                [title]="toDo.title"
+                [details]="toDo.details"
+                [createdAt]="toDo.createdAt"
+                [updatedAt]="toDo.updatedAt"
+                [completed]="toDo.completed">
+            </app-card>
+        }
+    </div>
+}

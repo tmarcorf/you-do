@@ -19,5 +19,15 @@ namespace YouDo.Application.Extensions
                 createUserDTO.DateOfBirth,
                 createUserDTO.Gender);
         }
+
+        public static UserInfoDTO ToUserInfoDTO(this User user)
+        {
+            return new UserInfoDTO
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+        }
     }
 }

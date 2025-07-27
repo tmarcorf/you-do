@@ -1,0 +1,7 @@
+<div class="notification-wrapper">
+  @for (note of notifications(); track note) {
+    <div class="notification" [ngClass]="note.type">
+      {{ note.message }}
+    </div>
+  }
+</div>

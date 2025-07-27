@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using YouDo.API.Responses;
 using YouDo.Application.DTOs.Authenticate;
 using YouDo.Application.Interfaces;
@@ -50,6 +52,35 @@ namespace YouDo.API.Controllers
             }
 
             return Ok(ApiResponse<UserTokenDTO>.Success(result.Data));
+        }
+
+        [Authorize]
+        [HttpGet("user-info")]
+        public async Task<ActionResult> GetUserInfo()
+        {
+            var userIdGuid = GetUserId();
+
+            var result = await _authenticateService.GetUserInfo(userIdGuid);
+
+            if (!result.IsSuccess)
+            {
+                return NotFound(ApiResponse<UserInfoDTO>.Failure(result.Error.Message, "404"));
+            }
+
+            return Ok(ApiResponse<UserInfoDTO>.Success(result.Data));
+        }
+
+        private Guid GetUserId()
+        {
+            Guid userId;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out userId))
+            {
+                throw new UnauthorizedAccessException("Not authorized user");
+            }
+
+            return userId;
         }
     }
 }

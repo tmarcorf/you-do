@@ -71,6 +71,25 @@ namespace YouDo.Application.Services
             return Result<IdentityResult>.Success(createResult);
         }
 
+        public async Task<Result<UserInfoDTO>> GetUserInfo(Guid userId)
+        {
+            if (userId.Equals(Guid.Empty))
+            {
+                return null;
+            }
+
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user != null)
+            {
+                var userInfoDto = user.ToUserInfoDTO();
+
+                return Result<UserInfoDTO>.Success(userInfoDto);
+            }
+
+            return Result<UserInfoDTO>.Failure(AuthenticateErrors.InvalidUserId);
+        }
+
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();

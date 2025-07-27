@@ -11,6 +11,8 @@ namespace YouDo.Application.Interfaces
 
         Task<Result<IdentityResult>> RegisterUser(CreateUserDTO user, string password);
 
+        Task<Result<UserInfoDTO>> GetUserInfo(Guid userId);
+
         Task Logout();
     }
 }

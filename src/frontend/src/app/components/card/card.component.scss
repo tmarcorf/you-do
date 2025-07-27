@@ -1,0 +1,33 @@
+.card {
+    display: flex;
+    flex-direction: row;
+}
+
+.card-content {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    width: 280px;
+    background-color: var(--card-background);
+    color: #fff;
+    word-break: break-word;
+    overflow-wrap: break-word;
+
+    .delete-button {
+        float: right;
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-size: 1.2rem;
+        cursor: pointer;
+
+        &:hover {
+            color: red;
+        }
+    }
+}
+
+.delete-area {
+    padding: 0px 0px 30px 0px;
+}

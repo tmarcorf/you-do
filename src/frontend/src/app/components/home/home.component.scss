@@ -1,0 +1,24 @@
+.btn-primary {
+    background-color: #007bff;
+    border-radius: 5px;
+}
+
+#btn-add-task {
+    margin: 10px 0px 0px 10px;
+}
+
+.cards-area {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px;
+}
+
+#empty-tasks-title {
+    display: flex;
+    justify-content: center; 
+    align-items: center;  
+    margin-top: 50px;
+    text-align: center;
+}

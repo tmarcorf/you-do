@@ -1,0 +1,21 @@
+<div id="nav-bar">
+  <div id="home-link">
+    <h1>
+      <a href="/">YouDo</a>
+    </h1>
+  </div>
+
+  <div id="user-section">
+
+    @if(this.userName != '') {
+      <span id="greeting">Hello, {{this.userName}}</span>
+    }
+
+    @if(router.url !== '/login') {
+      <a id="login-button" href="/login">
+        <button class="btn btn-primary" (click)="clearData()">Login</button>
+      </a>
+    }
+
+  </div>
+</div>
